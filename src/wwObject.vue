@@ -2,7 +2,7 @@
     <div class="elem-radios">
         <div class="elem-radio" v-for="option in wwObject.content.data.config.options" :key="option.id">
             <div class="radio">
-                <input type="radio" :name="wwObject.content.data.config.name" :value="option.value" :required="wwObject.content.data.config.required">
+                <input type="radio" :name="wwObject.content.data.config.name" :value="option.value" :required="wwObject.content.data.config.required" />
             </div>
             <div class="text">
                 <wwObject :ww-object="option.wwObject"></wwObject>
@@ -117,7 +117,7 @@ export default {
         }
         /* wwManager:end */
     },
-    created() {
+    mounted() {
         this.wwObject.content.data = this.wwObject.content.data || {}
         this.wwObject.content.data.config = this.wwObject.content.data.config || {}
 
@@ -130,12 +130,16 @@ export default {
 <style lang="scss" scoped>
 .elem-radios {
     .elem-radio {
+        padding: 5px 0;
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
         .radio {
             outline: none;
             margin-right: 5px;
+        }
+        .text {
+            width: 100%;
         }
     }
 }

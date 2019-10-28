@@ -5,7 +5,7 @@
                 <wwManagerInput class="input" color="orange" v-model="result.radioConfig.name" :label="`Name`"></wwManagerInput>
             </div>
             <div class="elem">
-               <div class="title">Required</div>
+                <div class="title">Required</div>
                 <wwManagerRadio class="radio" v-model="result.radioConfig.required"></wwManagerRadio>
             </div>
             <div class="elem">
@@ -53,7 +53,7 @@ export default {
             this.options.result = this.result
         },
         addOption() {
-             this.wwObject.content.data.config.options.push({
+            this.wwObject.content.data.config.options.push({
                 value: '',
                 wwObject: wwLib.wwObject.getDefault({ type: 'ww-text' })
             })
@@ -75,14 +75,18 @@ export default {
     .content {
         display: flex;
         padding: 20px;
-        flex-wrap: wrap;
+        flex-direction: column;
         overflow: auto;
         width: 100%;
-        justify-content: center;
+        align-items: center;
         font-family: "Monserrat", sans-serif;
         .elem {
-            margin: 10px 33%;
-            width: 33%;
+            margin: 10px;
+            width: 90%;
+
+            @media (min-width: 992px) {
+                width: 40%;
+            }
             .input {
                 width: 100%;
             }
@@ -93,7 +97,7 @@ export default {
                 margin-bottom: 20px;
             }
         }
-        
+
         .title {
             color: #e02a4d;
             font-family: "Monserrat", sans-serif;

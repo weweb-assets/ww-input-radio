@@ -9,6 +9,10 @@ const addComponent = function () {
         wwLib.wwObject.register({
             /* wwManager:start */
             cmsOptions: {
+                displayName: {
+                    en: 'Form Radio',
+                    fr: 'Choix de Formulaire'
+                },
                 wwObjectMenu: {
                     items: [
                         {
