@@ -1,37 +1,16 @@
 {
     "componentPath": "./src/wwObject.vue",
-    "content": {
-        "type": "ww-form-radio",
-        "data": {
-            "isNew": true,
-            "config": {
-                "name": "name",
-                "required": true,
-                "options": []
-            }
-        }
-    },
-    "upsales": {
-        "wwAnalytics": {
-            "click": true
-        }
-    },
-    "cmsOptions": {
-        "displayName": {
-            "en": "Form Radio",
-            "fr": "Choix de Formulaire"
+    "editor": {
+        "label": {
+            "fr": "Choix de Formulaire",
+            "en": "Form Radio"
         },
-        "wwObjectMenu": {
+        "editElementMenu": {
             "items": [
                 {
-                    "name": "OPTIONS",
-                    "text": {
-                        "en": "Options...",
-                        "fr": "Options..."
-                    },
-                    "main": true,
-                    "icon": "wwi wwi-edit-other",
-                    "action": "options"
+                    "label": { "en": "Options", "fr": "Options" },
+                    "icon": "config",
+                    "action": "setOptions"
                 }
             ]
         }
