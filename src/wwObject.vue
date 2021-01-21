@@ -1,6 +1,6 @@
 <template>
     <div class="ww-form-radio" v-if="content.globalSettings">
-        <div class="ww-form-radio__container" v-for="option in content.globalSettings.options" :key="option.id">
+        <div class="ww-form-radio__container" v-for="option in content.globalSettings.choices" :key="option.id">
             <input
                 :id="option.value"
                 class="ww-form-radio__radio"
@@ -30,7 +30,7 @@ export default {
         globalSettings: {
             name: 'name',
             required: true,
-            options: [
+            choices: [
                 {
                     value: 'first value',
                     wwObject: { isWwObject: true, type: 'ww-text' },
@@ -44,14 +44,14 @@ export default {
     },
     /* wwEditor:start */
     watch: {
-        'content.globalSettings.options': {
+        'content.globalSettings.choices': {
             async handler() {
                 if (!this.content.globalSettings) return;
-                const options = _.cloneDeep(this.content.globalSettings.options);
-                for (const option of options) {
+                const choices = _.cloneDeep(this.content.globalSettings.choices);
+                for (const option of choices) {
                     if (option.wwObject) continue;
                     option.wwObject = { isWwObject: true, uid: await wwLib.wwObjectHelper.create('ww-text') };
-                    this.$emit('update', { globalSettings: { ...this.content.globalSettings, options } });
+                    this.$emit('update', { globalSettings: { ...this.content.globalSettings, choices } });
                 }
             },
             deep: true,

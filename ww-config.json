@@ -19,9 +19,9 @@
                 "label": { "en": "Required", "fr": "Requis" },
                 "type": "OnOff"
             },
-            "options": {
-                "path": "globalSettings.options",
-                "label": { "en": "Options", "fr": "fr" },
+            "choices": {
+                "path": "globalSettings.choices",
+                "label": { "en": "Choices values", "fr": "fr" },
                 "type": "List",
                 "options": {
                     "options": [
