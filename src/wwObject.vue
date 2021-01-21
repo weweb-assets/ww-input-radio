@@ -1,24 +1,20 @@
 <template>
-    <div class="ww-form-radio">
-        <div class="elem-radio" v-for="option in content.config.options" :key="option.id">
+    <div class="ww-form-radio" v-if="content.globalSettings">
+        <div class="ww-form-radio__container" v-for="option in content.globalSettings.options" :key="option.id">
             <input
-                class="radio"
-                :class="{ 'ww-editing': isEditing }"
+                class="ww-form-radio__radio"
+                :class="{ editing: isEditing }"
                 type="radio"
-                :name="content.config.name"
+                :name="content.globalSettings.name"
                 :value="option.value"
-                :required="content.config.required"
+                :required="content.globalSettings.required"
             />
-            <wwObject class="text" v-bind="option.wwObject"></wwObject>
+            <wwObject v-if="option.wwObject" v-bind="option.wwObject"></wwObject>
         </div>
     </div>
 </template>
 
 <script>
-/* wwEditor:start */
-import openPopup from './popups';
-/* wwEditor:end */
-
 export default {
     name: '__COMPONENT_NAME__',
     props: {
@@ -28,7 +24,7 @@ export default {
         /* wwEditor:end */
     },
     wwDefaultContent: {
-        config: {
+        globalSettings: {
             name: 'name',
             required: true,
             options: [
@@ -43,46 +39,50 @@ export default {
             ],
         },
     },
-    data() {
-        return {
-            wwLang: wwLib.wwLang,
-        };
-    },
-    computed: {
-        isEditing() {
-            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
-        },
-    },
     /* wwEditor:start */
-    methods: {
-        async setOptions() {
-            const result = await openPopup(this.content);
-            if (result) this.$emit('update', result);
+    watch: {
+        'content.globalSettings.options': {
+            async handler() {
+                if (!this.content.globalSettings) return;
+                const options = _.cloneDeep(this.content.globalSettings.options);
+                for (const option of options) {
+                    if (option.wwObject) continue;
+                    option.wwObject = { isWwObject: true, uid: await wwLib.wwObjectHelper.create('ww-text') };
+                    this.$emit('update', { globalSettings: { ...this.content.globalSettings, options } });
+                }
+            },
+            deep: true,
         },
     },
     /* wwEditor:end */
+    computed: {
+        isEditing() {
+            /* wwEditor:start */
+            return this.wwEditorState.isSelected;
+            /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
+            return false;
+        },
+    },
 };
 </script>
 
 <style lang="scss" scoped>
 .ww-form-radio {
-    .elem-radio {
-        padding: 5px 0;
+    &__container {
+        padding: var(--ww-spacing-01) 0;
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        .radio {
-            outline: none;
-            margin-right: 5px;
-            /* wwEditor:start */
-            &.ww-editing {
-                pointer-events: none;
-            }
-            /* wwEditor:end */
+    }
+    &__radio {
+        outline: none;
+        margin-right: var(--ww-spacing-01);
+        /* wwEditor:start */
+        &.editing {
+            pointer-events: none;
         }
-        .text {
-            width: 100%;
-        }
+        /* wwEditor:end */
     }
 }
 </style>

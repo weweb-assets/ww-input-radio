@@ -5,14 +5,36 @@
             "fr": "Choix de Formulaire",
             "en": "Form Radio"
         },
-        "editElementMenu": {
-            "items": [
-                {
-                    "label": { "en": "Options", "fr": "Options" },
-                    "icon": "config",
-                    "action": "setOptions"
+        "settingsOptions": {
+            "name": {
+                "path": "globalSettings.name",
+                "label": { "en": "Name", "fr": "fr" },
+                "type": "Text",
+                "options": {
+                    "placeholder": "Name"
                 }
-            ]
+            },
+            "required": {
+                "path": "globalSettings.required",
+                "label": { "en": "Required", "fr": "Requis" },
+                "type": "OnOff"
+            },
+            "options": {
+                "path": "globalSettings.options",
+                "label": { "en": "Options", "fr": "fr" },
+                "type": "List",
+                "options": {
+                    "options": [
+                        {
+                            "path": "value",
+                            "type": "Text",
+                            "options": {
+                                "placeholder": "Value"
+                            }
+                        }
+                    ]
+                }
+            }
         }
     }
 }
