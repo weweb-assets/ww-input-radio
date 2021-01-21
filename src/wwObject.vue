@@ -2,6 +2,7 @@
     <div class="ww-form-radio" v-if="content.globalSettings">
         <div class="ww-form-radio__container" v-for="option in content.globalSettings.options" :key="option.id">
             <input
+                :id="option.value"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
@@ -9,7 +10,9 @@
                 :value="option.value"
                 :required="content.globalSettings.required"
             />
-            <wwObject v-if="option.wwObject" v-bind="option.wwObject"></wwObject>
+            <label :for="option.value">
+                <wwObject v-if="option.wwObject" v-bind="option.wwObject"></wwObject>
+            </label>
         </div>
     </div>
 </template>
@@ -58,7 +61,7 @@ export default {
     computed: {
         isEditing() {
             /* wwEditor:start */
-            return this.wwEditorState.isSelected;
+            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
