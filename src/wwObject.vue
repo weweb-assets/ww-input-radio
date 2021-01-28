@@ -77,6 +77,7 @@ export default {
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
+        align-items: center;
     }
     &__radio {
         outline: none;
