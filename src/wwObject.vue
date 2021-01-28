@@ -10,9 +10,9 @@
                 :value="option.value"
                 :required="content.globalSettings.required"
             />
-            <label :for="option.value">
+            <component :is="isEditing ? 'div' : 'label'" :for="option.value">
                 <wwObject v-if="option.wwObject" v-bind="option.wwObject"></wwObject>
-            </label>
+            </component>
         </div>
     </div>
 </template>
