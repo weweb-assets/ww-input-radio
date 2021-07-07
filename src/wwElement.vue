@@ -11,7 +11,7 @@
                 :required="content.globalSettings.required"
             />
             <component :is="isEditing ? 'div' : 'label'" :for="option.value">
-                <wwElement v-if="option.wwElement" v-bind="option.wwElement"></wwElement>
+                <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
             </component>
         </div>
     </div>
@@ -33,11 +33,11 @@ export default {
             choices: [
                 {
                     value: 'first value',
-                    wwElement: { iswwElement: true, type: 'ww-text' },
+                    wwObject: { isWwObject: true, type: 'ww-text' },
                 },
                 {
                     value: 'second value',
-                    wwElement: { iswwElement: true, type: 'ww-text' },
+                    wwObject: { isWwObject: true, type: 'ww-text' },
                 },
             ],
         },
@@ -59,8 +59,8 @@ export default {
                 if (!this.content.globalSettings) return;
                 const choices = _.cloneDeep(this.content.globalSettings.choices);
                 for (const option of choices) {
-                    if (option.wwElement) continue;
-                    option.wwElement = { iswwElement: true, uid: await wwLib.wwElementHelper.create('ww-text') };
+                    if (option.wwObject) continue;
+                    option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
                     this.$emit('update:content', { globalSettings: { ...this.content.globalSettings, choices } });
                 }
             },
