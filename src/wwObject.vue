@@ -1,6 +1,6 @@
 <template>
-    <div class="ww-form-radio" v-if="content.globalSettings">
-        <div class="ww-form-radio__container" v-for="option in content.globalSettings.choices" :key="option.id">
+    <div v-if="content.globalSettings" class="ww-form-radio">
+        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
             <input
                 :id="option.value"
                 class="ww-form-radio__radio"
@@ -19,13 +19,13 @@
 
 <script>
 export default {
-    name: '__COMPONENT_NAME__',
     props: {
-        content: Object,
+        content: { type: Object, required: true },
         /* wwEditor:start */
-        wwEditorState: Object,
+        wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
+    emits: ['update:content'],
     wwDefaultContent: {
         globalSettings: {
             name: 'name',
@@ -42,6 +42,16 @@ export default {
             ],
         },
     },
+    /* wwEditor:end */
+    computed: {
+        isEditing() {
+            /* wwEditor:start */
+            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
+            /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
+            return false;
+        },
+    },
     /* wwEditor:start */
     watch: {
         'content.globalSettings.choices': {
@@ -51,20 +61,10 @@ export default {
                 for (const option of choices) {
                     if (option.wwObject) continue;
                     option.wwObject = { isWwObject: true, uid: await wwLib.wwObjectHelper.create('ww-text') };
-                    this.$emit('update', { globalSettings: { ...this.content.globalSettings, choices } });
+                    this.$emit('update:content', { globalSettings: { ...this.content.globalSettings, choices } });
                 }
             },
             deep: true,
-        },
-    },
-    /* wwEditor:end */
-    computed: {
-        isEditing() {
-            /* wwEditor:start */
-            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
-            /* wwEditor:end */
-            // eslint-disable-next-line no-unreachable
-            return false;
         },
     },
 };
