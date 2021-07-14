@@ -42,7 +42,6 @@ export default {
             ],
         },
     },
-    /* wwEditor:end */
     computed: {
         isEditing() {
             /* wwEditor:start */
@@ -67,6 +66,7 @@ export default {
             deep: true,
         },
     },
+    /* wwEditor:end */
 };
 </script>
 
