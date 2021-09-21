@@ -2,7 +2,7 @@
     <div v-if="content.globalSettings" class="ww-form-radio">
         <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
             <input
-                :id="option.value"
+                :id="`${content.globalSettings.name}-${option.value}`"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
@@ -10,7 +10,7 @@
                 :value="option.value"
                 :required="content.globalSettings.required"
             />
-            <component :is="isEditing ? 'div' : 'label'" :for="option.value">
+            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
                 <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
             </component>
         </div>
