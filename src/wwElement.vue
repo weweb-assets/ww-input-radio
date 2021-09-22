@@ -1,16 +1,16 @@
 <template>
-    <div v-if="content.globalSettings" class="ww-form-radio">
-        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
+    <div class="ww-form-radio">
+        <div v-for="option in content.choices" :key="option.id" class="ww-form-radio__container">
             <input
-                :id="`${content.globalSettings.name}-${option.value}`"
+                :id="`${content.name}-${option.value}`"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
-                :name="content.globalSettings.name"
+                :name="content.name"
                 :value="option.value"
-                :required="content.globalSettings.required"
+                :required="content.required"
             />
-            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
+            <component :is="isEditing ? 'div' : 'label'" :for="`${content.name}-${option.value}`">
                 <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
             </component>
         </div>
@@ -25,23 +25,7 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    emits: ['update:content'],
-    wwDefaultContent: {
-        globalSettings: {
-            name: 'name',
-            required: true,
-            choices: [
-                {
-                    value: 'first value',
-                    wwObject: { isWwObject: true, type: 'ww-text' },
-                },
-                {
-                    value: 'second value',
-                    wwObject: { isWwObject: true, type: 'ww-text' },
-                },
-            ],
-        },
-    },
+    emits: ['update:content:effect'],
     computed: {
         isEditing() {
             /* wwEditor:start */
@@ -53,14 +37,14 @@ export default {
     },
     /* wwEditor:start */
     watch: {
-        'content.globalSettings.choices': {
+        'content.choices': {
             async handler() {
-                if (!this.content.globalSettings) return;
-                const choices = _.cloneDeep(this.content.globalSettings.choices);
+                if (!this.content) return;
+                const choices = _.cloneDeep(this.content.choices);
                 for (const option of choices) {
                     if (option.wwObject) continue;
                     option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
-                    this.$emit('update:content', { globalSettings: { ...this.content.globalSettings, choices } });
+                    this.$emit('update:content:effect', { choices });
                 }
             },
             deep: true,
