@@ -19,9 +19,20 @@ export default {
                     },
                     choices: {
                         label: { en: 'Choices values', fr: 'Choices values' },
-                        type: 'List',
+                        type: 'Array',
                         options: {
-                            options: [{ path: 'value', type: 'Text', options: { placeholder: 'Value' } }],
+                            item: {
+                                type: 'Object',
+                                options: {
+                                    item: {
+                                        value: {
+                                            label: { en: 'Value' },
+                                            type: 'Text',
+                                            options: { placeholder: 'Value' },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
