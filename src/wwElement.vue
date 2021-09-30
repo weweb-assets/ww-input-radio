@@ -1,16 +1,16 @@
 <template>
     <div class="ww-form-radio">
-        <div v-for="option in content.choices" :key="option.id" class="ww-form-radio__container">
+        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
             <input
-                :id="`${content.name}-${option.value}`"
+                :id="`${content.globalSettings.name}-${option.value}`"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
-                :name="content.name"
+                :name="content.globalSettings.name"
                 :value="option.value"
-                :required="content.required"
+                :required="content.globalSettings.required"
             />
-            <component :is="isEditing ? 'div' : 'label'" :for="`${content.name}-${option.value}`">
+            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
                 <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
             </component>
         </div>
@@ -37,14 +37,16 @@ export default {
     },
     /* wwEditor:start */
     watch: {
-        'content.choices': {
+        'content.globalSettings.choices': {
             async handler() {
-                if (!this.content) return;
-                const choices = _.cloneDeep(this.content.choices);
+                if (!this.content.globalSettings) return;
+                const choices = _.cloneDeep(this.content.globalSettings.choices);
                 for (const option of choices) {
                     if (option.wwObject) continue;
                     option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
-                    this.$emit('update:content:effect', { choices });
+                    this.$emit('update:content:effect', {
+                        globalSettings: { ...this.content.globalSettings, choices },
+                    });
                 }
             },
             deep: true,
