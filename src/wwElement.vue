@@ -1,4 +1,4 @@
-<template>
+<template v-if="content.globalSettings">
     <div class="ww-form-radio">
         <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
             <input
