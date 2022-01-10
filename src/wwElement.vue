@@ -1,6 +1,6 @@
 <template v-if="content">
     <div class="ww-form-radio">
-        <div v-for="(option, index) in content.choices" :key="index" class="ww-form-radio__container">
+        <div v-for="(option, index) in options" :key="index" class="ww-form-radio__container">
             <input
                 v-if="option && option.value"
                 :id="`${wwElementState.name}-${option.value}`"
@@ -17,7 +17,7 @@
                 v-if="option && option.value"
                 :for="`${wwElementState.name}-${option.value}`"
             >
-                <wwElement v-if="content.choicesElements[index]" v-bind="content.choicesElements[index]" />
+                <wwElement v-bind="content.choicesElement" :ww-props="{ text: option.value }" />
             </component>
         </div>
     </div>
@@ -32,7 +32,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['update:content:effect', 'update:sidepanel-content', 'trigger-event'],
+    emits: ['trigger-event'],
     setup(props) {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '');
         return { variableValue, setValue };
@@ -63,29 +63,11 @@ export default {
                 data = new Array(data);
             }
 
-            return data.map(option => ({ value: typeof data[0] === 'object' ? option.value : option }));
+            return data.map(option => ({
+                value: typeof data[0] === 'object' ? (option && option.value ? `${option.value}` : '') : `${option}`,
+            }));
         },
     },
-    /* wwEditor:start */
-    watch: {
-        'content.choices': {
-            async handler(newProperties, oldProperties) {
-                if (_.isEqual(newProperties, oldProperties)) return;
-                if (!this.content.choicesElements) return;
-
-                let choicesElements = _.cloneDeep(this.content.choicesElements);
-                this.$emit('update:sidepanel-content', {
-                    path: 'choicesElements',
-                    value: choicesElements.map(async () => ({
-                        isWwObject: true,
-                        uid: await wwLib.wwElementHelper.create('ww-text'),
-                    })),
-                });
-            },
-            deep: true,
-        },
-    },
-    /* wwEditor:end */
 };
 </script>
 

@@ -24,12 +24,9 @@ export default {
             defaultValue: [{ value: 'first value' }, { value: 'second value' }],
             bindable: true,
         },
-        choicesElements: {
-            editorOnly: true,
-            defaultValue: [
-                { isWwObject: true, type: 'ww-text' },
-                { isWwObject: true, type: 'ww-text' },
-            ],
+        choicesElement: {
+            hidden: true,
+            defaultValue: { isWwObject: true, type: 'ww-text' },
         },
         required: {
             label: { en: 'Required', fr: 'Requis' },
