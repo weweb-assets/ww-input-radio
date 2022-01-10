@@ -3,21 +3,21 @@
         <div v-for="(option, index) in content.choices" :key="index" class="ww-form-radio__container">
             <input
                 v-if="option && option.value"
-                :id="`${content.name}-${option.value}`"
+                :id="`${wwElementState.name}-${option.value}`"
                 v-model="value"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
-                :name="content.name"
+                :name="wwElementState.name"
                 :value="option.value"
                 :required="content.required"
             />
             <component
                 :is="isEditing ? 'div' : 'label'"
                 v-if="option && option.value"
-                :for="`${content.name}-${option.value}`"
+                :for="`${wwElementState.name}-${option.value}`"
             >
-                <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
+                <wwElement v-if="content.choicesElements[index]" v-bind="content.choicesElements[index]" />
             </component>
         </div>
     </div>
@@ -32,7 +32,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['update:content:effect', 'trigger-event'],
+    emits: ['update:content:effect', 'update:sidepanel-content', 'trigger-event'],
     setup(props) {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '');
         return { variableValue, setValue };
@@ -56,19 +56,31 @@ export default {
                 }
             },
         },
+        options() {
+            if (!this.content.choices) return;
+            let data = this.content.choices;
+            if (data && !Array.isArray(data)) {
+                data = new Array(data);
+            }
+
+            return data.map(option => ({ value: typeof data[0] === 'object' ? option.value : option }));
+        },
     },
     /* wwEditor:start */
     watch: {
         'content.choices': {
             async handler(newProperties, oldProperties) {
                 if (_.isEqual(newProperties, oldProperties)) return;
-                if (!this.content) return;
-                const choices = _.cloneDeep(this.content.choices);
-                for (const option of choices) {
-                    if (!option || option.wwObject) continue;
-                    option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
-                }
-                this.$emit('update:content:effect', { choices });
+                if (!this.content.choicesElements) return;
+
+                let choicesElements = _.cloneDeep(this.content.choicesElements);
+                this.$emit('update:sidepanel-content', {
+                    path: 'choicesElements',
+                    value: choicesElements.map(async () => ({
+                        isWwObject: true,
+                        uid: await wwLib.wwElementHelper.create('ww-text'),
+                    })),
+                });
             },
             deep: true,
         },

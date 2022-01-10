@@ -17,16 +17,19 @@ export default {
                                 type: 'Text',
                                 options: { placeholder: 'Value' },
                             },
-                            wwObject: { isWwObject: true, type: 'ww-text', hidden: true },
                         },
                     },
                 },
             },
-            defaultValue: [
-                { value: 'first value', wwObject: { isWwObject: true, type: 'ww-text' } },
-                { value: 'second value', wwObject: { isWwObject: true, type: 'ww-text' } },
-            ],
+            defaultValue: [{ value: 'first value' }, { value: 'second value' }],
             bindable: true,
+        },
+        choicesElements: {
+            editorOnly: true,
+            defaultValue: [
+                { isWwObject: true, type: 'ww-text' },
+                { isWwObject: true, type: 'ww-text' },
+            ],
         },
         required: {
             label: { en: 'Required', fr: 'Requis' },
