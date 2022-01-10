@@ -1,16 +1,22 @@
-<template v-if="content.globalSettings">
+<template v-if="content">
     <div class="ww-form-radio">
-        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
+        <div v-for="(option, index) in content.choices" :key="index" class="ww-form-radio__container">
             <input
-                :id="`${content.globalSettings.name}-${option.value}`"
+                v-if="option && option.value"
+                :id="`${content.name}-${option.value}`"
+                v-model="value"
                 class="ww-form-radio__radio"
                 :class="{ editing: isEditing }"
                 type="radio"
-                :name="content.globalSettings.name"
+                :name="content.name"
                 :value="option.value"
-                :required="content.globalSettings.required"
+                :required="content.required"
             />
-            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
+            <component
+                :is="isEditing ? 'div' : 'label'"
+                v-if="option && option.value"
+                :for="`${content.name}-${option.value}`"
+            >
                 <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
             </component>
         </div>
@@ -24,8 +30,13 @@ export default {
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
+        wwElementState: { type: Object, required: true },
     },
-    emits: ['update:content:effect'],
+    emits: ['update:content:effect', 'trigger-event'],
+    setup(props) {
+        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(props.uid, 'value', '');
+        return { variableValue, setValue };
+    },
     computed: {
         isEditing() {
             /* wwEditor:start */
@@ -34,20 +45,30 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
+        value: {
+            get() {
+                return `${this.variableValue}`;
+            },
+            set(value) {
+                if (value !== undefined && value !== this.variableValue) {
+                    this.$emit('trigger-event', { name: 'change', event: { value } });
+                    this.setValue(value);
+                }
+            },
+        },
     },
     /* wwEditor:start */
     watch: {
-        'content.globalSettings.choices': {
-            async handler() {
-                if (!this.content.globalSettings) return;
-                const choices = _.cloneDeep(this.content.globalSettings.choices);
+        'content.choices': {
+            async handler(newProperties, oldProperties) {
+                if (_.isEqual(newProperties, oldProperties)) return;
+                if (!this.content) return;
+                const choices = _.cloneDeep(this.content.choices);
                 for (const option of choices) {
-                    if (option.wwObject) continue;
+                    if (!option || option.wwObject) continue;
                     option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
-                    this.$emit('update:content:effect', {
-                        globalSettings: { ...this.content.globalSettings, choices },
-                    });
                 }
+                this.$emit('update:content:effect', { choices });
             },
             deep: true,
         },
