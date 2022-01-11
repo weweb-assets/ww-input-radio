@@ -1,8 +1,8 @@
 {
-    "name": "ww-form-radio",
+    "name": "ww-input-radio",
     "repository": {
         "type": "git",
-        "url": "https://github.com/weweb-assets/ww-form-radio"
+        "url": "https://github.com/weweb-assets/ww-input-radio"
     },
     "version": "3.3.0",
     "scripts": {
