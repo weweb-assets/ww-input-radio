@@ -1,18 +1,22 @@
 <template v-if="content.globalSettings">
     <div class="ww-form-radio">
-        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
-            <input
-                :id="`${content.globalSettings.name}-${option.value}`"
-                class="ww-form-radio__radio"
-                :class="{ editing: isEditing }"
-                type="radio"
-                :name="content.globalSettings.name"
-                :value="option.value"
-                :required="content.globalSettings.required"
-            />
-            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
-                <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
-            </component>
+        <div v-for="(option, index) in content.globalSettings.choices" :key="index" class="ww-form-radio__container">
+            <template v-if="option && option.value">
+                <input
+                    :id="`${content.globalSettings.name}-${option.value}`"
+                    class="ww-form-radio__radio"
+                    :class="{ editing: isEditing }"
+                    type="radio"
+                    :name="content.globalSettings.name"
+                    :value="option.value"
+                    :checked="option.value === internalValue"
+                    :required="content.globalSettings.required"
+                    @input="setInternalValue(option.value)"
+                />
+                <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
+                    <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
+                </component>
+            </template>
         </div>
     </div>
 </template>
@@ -26,6 +30,11 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content:effect'],
+    data() {
+        return {
+            internalValue: null,
+        };
+    },
     computed: {
         isEditing() {
             /* wwEditor:start */
@@ -53,6 +62,11 @@ export default {
         },
     },
     /* wwEditor:end */
+    methods: {
+        setInternalValue(value) {
+            this.internalValue = value;
+        },
+    },
 };
 </script>
 
