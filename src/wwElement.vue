@@ -98,9 +98,9 @@ export default {
             if (!isBind) this.$emit('update:content:effect', { labelField: null, valueField: null });
         },
         /* wwEditor:end */
-        'content.value'(newValue, OldValue) {
+        'content.value'(newValue) {
             newValue = `${newValue}`;
-            if (newValue === OldValue) return;
+            if (newValue === this.value) return;
             this.setValue(newValue);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
         },
