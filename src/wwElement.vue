@@ -1,18 +1,22 @@
-<template v-if="content.globalSettings">
-    <div class="ww-form-radio">
-        <div v-for="option in content.globalSettings.choices" :key="option.id" class="ww-form-radio__container">
-            <input
-                :id="`${content.globalSettings.name}-${option.value}`"
-                class="ww-form-radio__radio"
-                :class="{ editing: isEditing }"
-                type="radio"
-                :name="content.globalSettings.name"
-                :value="option.value"
-                :required="content.globalSettings.required"
-            />
-            <component :is="isEditing ? 'div' : 'label'" :for="`${content.globalSettings.name}-${option.value}`">
-                <wwElement v-if="option.wwObject" v-bind="option.wwObject" />
-            </component>
+<template v-if="content">
+    <div class="ww-input-radio">
+        <div v-for="(option, index) in options" :key="index" class="ww-input-radio__container">
+            <template v-if="option">
+                <input
+                    :id="`${wwElementState.name}-${option.label}`"
+                    :value="option.value"
+                    :checked="option.value === value"
+                    class="ww-input-radio__radio"
+                    :class="{ editing: isEditing }"
+                    type="radio"
+                    :name="wwElementState.name"
+                    :required="content.required"
+                    @input="handleManualInput($event.target.value)"
+                />
+                <component :is="isEditing ? 'div' : 'label'" :for="`${wwElementState.name}-${option.label}`">
+                    <wwElement v-bind="content.choicesElement" :ww-props="{ text: option.label }" />
+                </component>
+            </template>
         </div>
     </div>
 </template>
@@ -24,8 +28,17 @@ export default {
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
+        wwElementState: { type: Object, required: true },
     },
-    emits: ['update:content:effect'],
+    emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
+    setup(props) {
+        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable(
+            props.uid,
+            'value',
+            props.content.value === undefined ? '' : props.content.value
+        );
+        return { variableValue, setValue };
+    },
     computed: {
         isEditing() {
             /* wwEditor:start */
@@ -34,30 +47,76 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
-    },
-    /* wwEditor:start */
-    watch: {
-        'content.globalSettings.choices': {
-            async handler() {
-                if (!this.content.globalSettings) return;
-                const choices = _.cloneDeep(this.content.globalSettings.choices);
-                for (const option of choices) {
-                    if (option.wwObject) continue;
-                    option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
-                    this.$emit('update:content:effect', {
-                        globalSettings: { ...this.content.globalSettings, choices },
-                    });
-                }
-            },
-            deep: true,
+        value() {
+            return `${this.variableValue}`;
+        },
+        options() {
+            if (!this.content.options) return;
+            let data = this.content.options;
+            if (data && !Array.isArray(data) && typeof data === 'object') {
+                data = new Array(data);
+            } else if ((data && !Array.isArray(data)) || typeof data !== 'object') {
+                return [];
+            }
+
+            return data
+                .filter(item => !!item)
+                .map(item => {
+                    if (typeof item !== 'object') return { label: item, value: item };
+                    return {
+                        label: wwLib.wwLang.getText(item[this.content.labelField || 'label'] || ''),
+                        value: item[this.content.valueField || 'value'],
+                    };
+                });
         },
     },
-    /* wwEditor:end */
+    watch: {
+        /* wwEditor:start */
+        'content.options': {
+            immediate: true,
+            handler(options) {
+                const objectOptions = (options || []).filter(option => option && typeof option === 'object');
+                if (objectOptions[0]) {
+                    this.$emit('update:sidepanel-content', {
+                        path: 'itemsProperties',
+                        value: Object.keys(objectOptions[0]),
+                    });
+                } else {
+                    this.$emit('update:sidepanel-content', { path: 'itemsProperties', value: [] });
+                }
+            },
+        },
+        'wwEditorState.sidepanelContent.itemsProperties'(newProperties, oldProperties) {
+            if (_.isEqual(newProperties, oldProperties)) return;
+            if (this.wwEditorState.boundProps.options && newProperties && newProperties[0]) {
+                this.$emit('update:content:effect', { labelField: newProperties[0], valueField: newProperties[0] });
+            } else {
+                this.$emit('update:content:effect', { labelField: null, valueField: null });
+            }
+        },
+        'wwEditorState.boundProps.options'(isBind) {
+            if (!isBind) this.$emit('update:content:effect', { labelField: null, valueField: null });
+        },
+        /* wwEditor:end */
+        'content.value'(newValue) {
+            newValue = `${newValue}`;
+            if (newValue === this.value) return;
+            this.setValue(newValue);
+            this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+        },
+    },
+    methods: {
+        handleManualInput(value) {
+            if (value === this.value) return;
+            this.setValue(value);
+            this.$emit('trigger-event', { name: 'change', event: { value } });
+        },
+    },
 };
 </script>
 
 <style lang="scss" scoped>
-.ww-form-radio {
+.ww-input-radio {
     &__container {
         padding: var(--ww-spacing-01) 0;
         display: flex;
