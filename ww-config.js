@@ -3,8 +3,8 @@ export default {
         label: { fr: 'Choix de Formulaire', en: 'Form Radio' },
     },
     triggerEvents: [
-        { name: 'change', label: { en: 'Change' }, event: { value: '' } },
-        { name: 'iniValueChange', label: { en: 'Init value change' }, event: { value: '' } },
+        { name: 'change', label: { en: 'On Change' }, event: { value: '' } },
+        { name: 'iniValueChange', label: { en: 'On Init value change' }, event: { value: '' } },
     ],
 
     properties: {
@@ -37,6 +37,15 @@ export default {
             ],
             multilang: true,
             bindable: true,
+        },
+        value: {
+            label: {
+                en: 'Init value',
+            },
+            type: 'Text',
+            section: 'settings',
+            bindable: true,
+            defaultValue: '',
         },
         labelField: {
             hidden: (content, sidepanelContent, boundProps) =>
