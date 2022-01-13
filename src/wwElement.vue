@@ -29,6 +29,7 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
+        uid: { type: String, required: true },
     },
     emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props) {
@@ -48,7 +49,7 @@ export default {
             return false;
         },
         value() {
-            return `${this.variableValue}`;
+            return this.variableValue;
         },
         options() {
             if (!this.content.options) return;
