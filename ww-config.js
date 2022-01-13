@@ -4,7 +4,7 @@ export default {
     },
     triggerEvents: [
         { name: 'change', label: { en: 'On Change' }, event: { value: '' } },
-        { name: 'iniValueChange', label: { en: 'On Init value change' }, event: { value: '' } },
+        { name: 'initValueChange', label: { en: 'On Init value change' }, event: { value: '' } },
     ],
 
     properties: {
