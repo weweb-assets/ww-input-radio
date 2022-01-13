@@ -3,7 +3,7 @@
         <div v-for="(option, index) in options" :key="index" class="ww-input-radio__container">
             <template v-if="option">
                 <input
-                    :id="`${wwElementState.name}-${option.label}`"
+                    :id="`${wwElementState.name}-${uniqueId}-${option.label}`"
                     :value="option.value"
                     :checked="option.value === value"
                     class="ww-input-radio__radio"
@@ -13,7 +13,10 @@
                     :required="content.required"
                     @input="handleManualInput($event.target.value)"
                 />
-                <component :is="isEditing ? 'div' : 'label'" :for="`${wwElementState.name}-${option.label}`">
+                <component
+                    :is="isEditing ? 'div' : 'label'"
+                    :for="`${wwElementState.name}-${uniqueId}-${option.label}`"
+                >
                     <wwElement v-bind="content.choicesElement" :ww-props="{ text: option.label }" />
                 </component>
             </template>
@@ -38,7 +41,7 @@ export default {
             'value',
             props.content.value === undefined ? '' : props.content.value
         );
-        return { variableValue, setValue };
+        return { variableValue, setValue, uniqueId: wwLib.wwUtils.getUid() };
     },
     computed: {
         isEditing() {
