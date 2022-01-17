@@ -122,7 +122,7 @@ export default {
 <style lang="scss" scoped>
 .ww-input-radio {
     &__container {
-        padding: var(--ww-spacing-01) 0;
+        padding: 0.4rem 0;
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
@@ -130,7 +130,7 @@ export default {
     }
     &__radio {
         outline: none;
-        margin-right: var(--ww-spacing-01);
+        margin-right: 0.4rem;
         /* wwEditor:start */
         &.editing {
             pointer-events: none;
