@@ -40,7 +40,7 @@ export default {
             uid: props.uid,
             name: 'value',
             defaultValue: props.content.value,
-            sanitizer: value => value || ''
+            sanitizer: value => value === undefined ? '' : String(value)
         });
         return { variableValue, setValue, uniqueId: wwLib.wwUtils.getUid() };
     },
@@ -103,18 +103,19 @@ export default {
             if (!isBind) this.$emit('update:content:effect', { labelField: null, valueField: null });
         },
         /* wwEditor:end */
-        'content.value'(newValue) {
-            newValue = `${newValue}`;
-            if (newValue === this.value) return;
-            this.setValue(newValue);
-            this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+        'content.value'(value) {
+            const { newValue, hasChanged } = this.setValue(newValue);
+            if (hasChanged) {
+                this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+            }
         },
     },
     methods: {
         handleManualInput(value) {
-            if (value === this.value) return;
-            this.setValue(value);
-            this.$emit('trigger-event', { name: 'change', event: { value } });
+            const { newValue, hasChanged } = this.setValue(value);
+            if (hasChanged) {
+                this.$emit('trigger-event', { name: 'change', event: { value: newValue } });
+            }
         },
     },
 };
