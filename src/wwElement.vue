@@ -52,7 +52,7 @@ export default {
             return false;
         },
         value() {
-            if (!this.options.some(option => option === this.variableValue)) return null;
+            if (!this.options.some(option => option.value === this.variableValue)) return null;
             return this.variableValue;
         },
         options() {
