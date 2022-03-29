@@ -39,7 +39,7 @@ export default {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'value',
-            defaultValue: props.content.value === undefined ? '' : props.content.value
+            defaultValue: props.content.value === undefined ? '' : props.content.value,
         });
         return { variableValue, setValue, uniqueId: wwLib.wwUtils.getUid() };
     },
@@ -52,6 +52,7 @@ export default {
             return false;
         },
         value() {
+            if (!this.options.some(option => option === this.variableValue)) return null;
             return this.variableValue;
         },
         options() {
