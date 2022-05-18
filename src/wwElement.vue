@@ -11,7 +11,7 @@
                     type="radio"
                     :name="wwElementState.name"
                     :required="content.required"
-                    @input="handleManualInput($event.target.value)"
+                    @input="handleManualInput($event)"
                 />
                 <component
                     :is="isEditing ? 'div' : 'label'"
@@ -111,10 +111,11 @@ export default {
         },
     },
     methods: {
-        handleManualInput(value) {
+        handleManualInput(event) {
+            const value = event.target.value;
             if (value === this.value) return;
             this.setValue(value);
-            this.$emit('trigger-event', { name: 'change', event: { value } });
+            this.$emit('trigger-event', { name: 'change', event: { domEvent: event, value } });
         },
     },
 };
