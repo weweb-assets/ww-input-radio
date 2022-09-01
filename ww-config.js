@@ -3,7 +3,7 @@ export default {
         label: { fr: 'Choix de Formulaire', en: 'Form Radio' },
     },
     triggerEvents: [
-        { name: 'change', label: { en: 'On Change' }, event: { value: '' } },
+        { name: 'change', label: { en: 'On Change' }, event: { value: '' }, default: true },
         { name: 'initValueChange', label: { en: 'On Init value change' }, event: { value: '' } },
     ],
 
