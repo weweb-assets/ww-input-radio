@@ -37,6 +37,13 @@ export default {
             ],
             multilang: true,
             bindable: true,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'array',
+                tooltip:
+                    'A collection of data in array format: \n\n `[{}, {}, ...] || ["string1", "string2", ...] || [1, 2, ...]`',
+            },
+            /* wwEditor:end */
         },
         value: {
             label: {
@@ -46,6 +53,12 @@ export default {
             section: 'settings',
             bindable: true,
             defaultValue: '',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'A string that defines the initial value: `"first value"`',
+            },
+            /* wwEditor:end */
         },
         labelField: {
             hidden: (content, sidepanelContent, boundProps) =>
@@ -108,7 +121,13 @@ export default {
             type: 'OnOff',
             section: 'settings',
             defaultValue: true,
-            bindable: true
+            bindable: true,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'boolean',
+                tooltip: 'A boolean that defines if the input is required: `true | false`',
+            },
+            /* wwEditor:end */
         },
     },
 };
