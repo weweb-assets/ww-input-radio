@@ -1,5 +1,5 @@
 <template v-if="content">
-    <div class="ww-input-radio">
+    <div class="ww-input-radio" :style="style">
         <div v-for="(option, index) in options" :key="index" class="ww-input-radio__container">
             <template v-if="option">
                 <input
@@ -74,6 +74,21 @@ export default {
                     };
                 });
         },
+        style() {
+            return {
+                flexDirection: this.content.direction,
+                justifyContent: this.content.justifyContent,
+                alignItems: this.content.alignItems,
+                rowGap: this.content.rowGap,
+                columnGap: this.content.columnGap,
+                flexWrap:
+                    this.content.direction === 'column'
+                        ? 'nowrap'
+                        : this.content.flexWrap === false
+                        ? 'nowrap'
+                        : 'wrap',
+            };
+        },
     },
     watch: {
         /* wwEditor:start */
@@ -123,11 +138,12 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
+    display: flex;
+
     &__container {
         padding: 0.4rem 0;
         display: flex;
         flex-wrap: nowrap;
-        width: 100%;
         align-items: center;
     }
     &__radio {
