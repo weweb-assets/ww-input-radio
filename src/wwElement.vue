@@ -1,5 +1,5 @@
 <template v-if="content">
-    <div class="ww-input-radio" :style="style">
+    <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio">
         <div v-for="(option, index) in options" :key="index" class="ww-input-radio__container">
             <template v-if="option">
                 <input
