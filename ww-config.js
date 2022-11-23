@@ -1,6 +1,7 @@
 export default {
     editor: {
         label: { fr: 'Choix de Formulaire (legacy)', en: 'Form Radio (legacy)' },
+        icon:"radio",
     },
     properties: {
         globalSettings: {
