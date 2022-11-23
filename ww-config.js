@@ -139,7 +139,7 @@ export default {
                 ],
             },
             responsive: true,
-            defaultValue: 'row',
+            defaultValue: 'column',
         },
         rowGap: {
             label: 'Rows gap',
@@ -240,7 +240,7 @@ export default {
                 }
             },
             responsive: true,
-            defaultValue: 'stretch',
+            defaultValue: 'flex-start',
         },
         flexWrap: {
             label: { en: 'Wrap elements' },
