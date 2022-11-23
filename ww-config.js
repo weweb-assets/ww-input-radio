@@ -1,6 +1,7 @@
 export default {
     editor: {
         label: { fr: 'Choix de Formulaire', en: 'Form Radio' },
+        icon: 'radio',
     },
     triggerEvents: [
         { name: 'change', label: { en: 'On Change' }, event: { value: '' }, default: true },
