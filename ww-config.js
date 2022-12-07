@@ -1,6 +1,6 @@
 export default {
     editor: {
-        label: { fr: 'Choix de Formulaire (legacy)', en: 'Form Radio (legacy)' },
+        label: { fr: 'Choix de Formulaire', en: 'Form Radio' },
         icon:"radio",
         deprecated: 'Use a radio input from the Elements panel instead of this one.',
     },
