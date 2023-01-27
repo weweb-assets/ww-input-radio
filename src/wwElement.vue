@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { computed } from "vue";
+
 export default {
     props: {
         content: { type: Object, required: true },
@@ -39,7 +41,7 @@ export default {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'value',
-            defaultValue: props.content.value === undefined ? '' : props.content.value,
+            defaultValue: computed(() => props.content.value === undefined ? '' : props.content.value),
         });
         return { variableValue, setValue, uniqueId: wwLib.wwUtils.getUid() };
     },
