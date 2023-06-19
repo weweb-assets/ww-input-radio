@@ -58,8 +58,8 @@ export default {
             return this.variableValue;
         },
         options() {
-            if (!this.content.options) return;
-            let data = this.content.options;
+            if (!this.content.options) return [];
+            let data = wwLib.wwCollection.getCollectionData(this.content.options) || [];
             if (data && !Array.isArray(data) && typeof data === 'object') {
                 data = new Array(data);
             } else if ((data && !Array.isArray(data)) || typeof data !== 'object') {
@@ -71,8 +71,8 @@ export default {
                 .map(item => {
                     if (typeof item !== 'object') return { label: item, value: item };
                     return {
-                        label: wwLib.wwLang.getText(item[this.content.labelField || 'label'] || ''),
-                        value: item[this.content.valueField || 'value'],
+                        label: wwLib.wwLang.getText(_.get(item, this.content.labelField || 'label') || ''),
+                        value: _.get(item, this.content.valueField || 'value'),
                     };
                 });
         },
@@ -94,28 +94,6 @@ export default {
     },
     watch: {
         /* wwEditor:start */
-        'content.options': {
-            immediate: true,
-            handler(options) {
-                const objectOptions = (options || []).filter(option => option && typeof option === 'object');
-                if (objectOptions[0]) {
-                    this.$emit('update:sidepanel-content', {
-                        path: 'itemsProperties',
-                        value: Object.keys(objectOptions[0]),
-                    });
-                } else {
-                    this.$emit('update:sidepanel-content', { path: 'itemsProperties', value: [] });
-                }
-            },
-        },
-        'wwEditorState.sidepanelContent.itemsProperties'(newProperties, oldProperties) {
-            if (_.isEqual(newProperties, oldProperties)) return;
-            if (this.wwEditorState.boundProps.options && newProperties && newProperties[0]) {
-                this.$emit('update:content:effect', { labelField: newProperties[0], valueField: newProperties[0] });
-            } else {
-                this.$emit('update:content:effect', { labelField: null, valueField: null });
-            }
-        },
         'wwEditorState.boundProps.options'(isBind) {
             if (!isBind) this.$emit('update:content:effect', { labelField: null, valueField: null });
         },

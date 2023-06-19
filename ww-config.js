@@ -1,16 +1,24 @@
+function getDataObject(options) {
+    if (!options) return {};
+    if (Array.isArray(options)) {
+        return options[0] || {};
+    }
+    return {};
+}
+
 export default {
     editor: {
-        label: { fr: 'Choix de Formulaire', en: 'Form Radio' },
+        label: 'Form Radio',
         icon: 'radio',
     },
     triggerEvents: [
-        { name: 'change', label: { en: 'On Change' }, event: { value: '' }, default: true },
-        { name: 'initValueChange', label: { en: 'On Init value change' }, event: { value: '' } },
+        { name: 'change', label: 'On Change', event: { value: '' }, default: true },
+        { name: 'initValueChange', label: 'On Init value change', event: { value: '' } },
     ],
     customStylePropertiesOrder: ['direction', ['rowGap', 'columnGap'], ['justifyContent', 'alignItems'], 'flexWrap'],
     properties: {
         options: {
-            label: { en: 'Choices values', fr: 'Choices values' },
+            label: 'Choices values',
             type: 'Array',
             section: 'settings',
             options: {
@@ -19,12 +27,12 @@ export default {
                     options: {
                         item: {
                             label: {
-                                label: { en: 'Label' },
+                                label: 'Label',
                                 type: 'Text',
                                 options: { placeholder: 'Label' },
                             },
                             value: {
-                                label: { en: 'Value' },
+                                label: 'Value',
                                 type: 'Text',
                                 options: { placeholder: 'Value' },
                             },
@@ -62,49 +70,28 @@ export default {
             /* wwEditor:end */
         },
         labelField: {
-            hidden: (content, sidepanelContent, boundProps) =>
-                !boundProps.options || !content.options || (content.options && typeof content.options[0] !== 'object'),
-            label: {
-                en: 'Label field',
-                fr: 'Label field',
+            hidden: (content, _sidepanelContent, boundProps) => {
+                const options = wwLib.wwCollection.getCollectionData(content.options);
+                return !boundProps.options || !options || (options && typeof options[0] !== 'object');
             },
-            type: 'TextSelect',
-            options: (content, sidepanelContent) => {
-                const data = content.options;
-                const options = sidepanelContent.itemsProperties
-                    .map(item => {
-                        return data && (typeof data[0][item] === 'string' || typeof data[0][item] === 'number')
-                            ? { value: item, label: { en: item } }
-                            : null;
-                    })
-                    .filter(item => !!item);
-
-                return {
-                    options: [{ value: null, label: { en: 'Select a property' } }, ...options],
-                };
-            },
+            label: 'Label field',
+            type: 'ObjectPropertyPath',
+            options: content => ({
+                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
+            }),
             defaultValue: null,
             section: 'settings',
         },
         valueField: {
-            hidden: (content, sidepanelContent, boundProps) =>
-                !boundProps.options || !content.options || (content.options && typeof content.options[0] !== 'object'),
-            label: {
-                en: 'Value field',
-                fr: 'Value field',
+            hidden: (content, _sidepanelContent, boundProps) => {
+                const options = wwLib.wwCollection.getCollectionData(content.options);
+                return !boundProps.options || !options || (options && typeof options[0] !== 'object');
             },
-            type: 'TextSelect',
-            options: (content, sidepanelContent) => {
-                const options = sidepanelContent.itemsProperties
-                    .map(item => {
-                        return { value: item, label: { en: item } };
-                    })
-                    .filter(item => !!item);
-
-                return {
-                    options: [{ value: null, label: { en: 'Select a property' } }, ...options],
-                };
-            },
+            label: 'Value field',
+            type: 'ObjectPropertyPath',
+            options: content => ({
+                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
+            }),
             defaultValue: null,
             section: 'settings',
         },
@@ -112,13 +99,8 @@ export default {
             hidden: true,
             defaultValue: { isWwObject: true, type: 'ww-text' },
         },
-        itemsProperties: {
-            hidden: true,
-            defaultValue: [],
-            editorOnly: true,
-        },
         required: {
-            label: { en: 'Required', fr: 'Requis' },
+            label: 'Required',
             type: 'OnOff',
             section: 'settings',
             defaultValue: true,
@@ -131,7 +113,7 @@ export default {
             /* wwEditor:end */
         },
         direction: {
-            label: { en: 'Direction', fr: 'Direction' },
+            label: 'Direction',
             type: 'BigIconRadioGroup',
             options: {
                 choices: [
@@ -167,23 +149,23 @@ export default {
             },
         },
         justifyContent: {
-            label: { en: 'Justify' },
+            label: 'Justify',
             type: 'TextRadioGroup',
             options: content => {
                 if (content.direction === 'row') {
                     return {
                         choices: [
-                            { value: 'flex-start', title: { en: 'Start', fr: 'Début' }, icon: 'align-x-start' },
-                            { value: 'center', title: { en: 'Center', fr: 'Milieu' }, icon: 'align-x-center' },
-                            { value: 'flex-end', title: { en: 'End', fr: 'Fin' }, icon: 'align-x-end' },
+                            { value: 'flex-start', title: 'Start', icon: 'align-x-start' },
+                            { value: 'center', title: 'Center', icon: 'align-x-center' },
+                            { value: 'flex-end', title: 'End', icon: 'align-x-end' },
                             {
                                 value: 'space-around',
-                                title: { en: 'Space around', fr: 'Space around' },
+                                title: 'Space around',
                                 icon: 'align-x-space-around',
                             },
                             {
                                 value: 'space-between',
-                                title: { en: 'Space between', fr: 'Space between' },
+                                title: 'Space between',
                                 icon: 'align-x-space-between',
                             },
                         ],
@@ -193,19 +175,19 @@ export default {
                         choices: [
                             {
                                 value: 'flex-start',
-                                title: { en: 'Start', fr: 'Début' },
+                                title: 'Start',
                                 icon: 'align-x-start-vertical',
                             },
-                            { value: 'center', title: { en: 'Center', fr: 'Milieu' }, icon: 'align-x-center-vertical' },
-                            { value: 'flex-end', title: { en: 'End', fr: 'Fin' }, icon: 'align-x-end-vertical' },
+                            { value: 'center', title: 'Center', icon: 'align-x-center-vertical' },
+                            { value: 'flex-end', title: 'End', icon: 'align-x-end-vertical' },
                             {
                                 value: 'space-around',
-                                title: { en: 'Space around', fr: 'Space around' },
+                                title: 'Space around',
                                 icon: 'align-x-space-around-vertical',
                             },
                             {
                                 value: 'space-between',
-                                title: { en: 'Space between', fr: 'Space between' },
+                                title: 'Space between',
                                 icon: 'align-x-space-between-vertical',
                             },
                         ],
@@ -216,26 +198,26 @@ export default {
             defaultValue: 'center',
         },
         alignItems: {
-            label: { en: 'Alignment' },
+            label: 'Alignment',
             type: 'TextRadioGroup',
             options: content => {
                 if (content.direction === 'row') {
                     return {
                         choices: [
-                            { value: 'flex-start', title: { en: 'Start', fr: 'Début' }, icon: 'align-y-start' },
-                            { value: 'center', title: { en: 'Center', fr: 'Milieu' }, icon: 'align-y-center' },
-                            { value: 'flex-end', title: { en: 'End', fr: 'Fin' }, icon: 'align-y-end' },
-                            { value: 'stretch', title: { en: 'Stretch', fr: 'Stretch' }, icon: 'align-y-stretch' },
-                            { value: 'baseline', title: { en: 'Baseline', fr: 'Baseline' }, icon: 'align-y-baseline' },
+                            { value: 'flex-start', title: 'Start', icon: 'align-y-start' },
+                            { value: 'center', title: 'Center', icon: 'align-y-center' },
+                            { value: 'flex-end', title: 'End', icon: 'align-y-end' },
+                            { value: 'stretch', title: 'Stretch', icon: 'align-y-stretch' },
+                            { value: 'baseline', title: 'Baseline', icon: 'align-y-baseline' },
                         ],
                     };
                 } else {
                     return {
                         choices: [
-                            { value: 'flex-start', title: { en: 'Start', fr: 'Début' }, icon: 'align-x-start' },
-                            { value: 'center', title: { en: 'Center', fr: 'Milieu' }, icon: 'align-x-center' },
-                            { value: 'flex-end', title: { en: 'End', fr: 'Fin' }, icon: 'align-x-end' },
-                            { value: 'stretch', title: { en: 'Stretch', fr: 'Stretch' }, icon: 'align-x-stretch' },
+                            { value: 'flex-start', title: 'Start', icon: 'align-x-start' },
+                            { value: 'center', title: 'Center', icon: 'align-x-center' },
+                            { value: 'flex-end', title: 'End', icon: 'align-x-end' },
+                            { value: 'stretch', title: 'Stretch', icon: 'align-x-stretch' },
                         ],
                     };
                 }
@@ -244,7 +226,7 @@ export default {
             defaultValue: 'flex-start',
         },
         flexWrap: {
-            label: { en: 'Wrap elements' },
+            label: 'Wrap elements',
             type: 'OnOff',
             hidden: content => content.direction !== 'row',
             responsive: true,
