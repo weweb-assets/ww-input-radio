@@ -122,6 +122,8 @@ export default {
                 ],
             },
             responsive: true,
+            states: true,
+            classes: true,
             defaultValue: 'column',
         },
         rowGap: {
@@ -135,6 +137,9 @@ export default {
                     { value: 'rem', label: 'rem', min: 0, max: 10, digits: 2 },
                 ],
             },
+            responsive: true,
+            states: true,
+            classes: true,
         },
         columnGap: {
             label: 'Columns gap',
@@ -147,6 +152,9 @@ export default {
                     { value: 'rem', label: 'rem', min: 0, max: 10, digits: 2 },
                 ],
             },
+            responsive: true,
+            states: true,
+            classes: true,
         },
         justifyContent: {
             label: 'Justify',
@@ -195,6 +203,8 @@ export default {
                 }
             },
             responsive: true,
+            states: true,
+            classes: true,
             defaultValue: 'center',
         },
         alignItems: {
@@ -223,6 +233,8 @@ export default {
                 }
             },
             responsive: true,
+            states: true,
+            classes: true,
             defaultValue: 'flex-start',
         },
         flexWrap: {
@@ -230,6 +242,8 @@ export default {
             type: 'OnOff',
             hidden: content => content.direction !== 'row',
             responsive: true,
+            states: true,
+            classes: true,
             defaultValue: true,
         },
     },
