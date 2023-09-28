@@ -9,7 +9,7 @@
                     class="ww-input-radio__radio"
                     :class="{ editing: isEditing }"
                     type="radio"
-                    :name="wwElementState.name"
+                    :name="`${wwElementState.name}-${uniqueId}-${option.label}`"
                     :required="content.required"
                     @input="handleManualInput($event)"
                 />
