@@ -30,10 +30,12 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content:effect'],
+    /* wwEditor:start */
     setup() {
         const { createElement } = wwLib.useCreateElement();
         return { createElement };
     },
+    /* wwEditor:end */
     data() {
         return {
             internalValue: null,
