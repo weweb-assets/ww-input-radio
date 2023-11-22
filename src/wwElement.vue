@@ -30,6 +30,12 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content:effect'],
+    /* wwEditor:start */
+    setup() {
+        const { createElement } = wwLib.useCreateElement();
+        return { createElement };
+    },
+    /* wwEditor:end */
     data() {
         return {
             internalValue: null,
@@ -52,7 +58,7 @@ export default {
                 const choices = _.cloneDeep(this.content.globalSettings.choices);
                 for (const option of choices) {
                     if (option.wwObject) continue;
-                    option.wwObject = { isWwObject: true, uid: await wwLib.wwElementHelper.create('ww-text') };
+                    option.wwObject = await this.createElement('ww-text');
                     this.$emit('update:content:effect', {
                         globalSettings: { ...this.content.globalSettings, choices },
                     });
