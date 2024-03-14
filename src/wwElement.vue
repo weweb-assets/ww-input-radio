@@ -1,5 +1,5 @@
 <template>
-    <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio" :data-ww-radio-id="uniqueId">
+    <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio">
         <div v-for="(option, index) in options" :key="`${wwElementState.name}-${uniqueId}-${option.label}`" class="ww-input-radio__container">
             <wwLayoutItemContext v-if="option" :index="index" is-repeat>
                 <input
@@ -30,6 +30,7 @@ import { computed, ref } from 'vue';
 export default {
     props: {
         content: { type: Object, required: true },
+        id: { type: String, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
@@ -45,8 +46,8 @@ export default {
         });
         return { variableValue, setValue, uniqueId: ref(null) };
     },
-    onMounted() {
-        this.uniqueId = this.$el.getAttribute('data-ww-radio-id') || wwLib.wwUtils.getUid();
+    mounted() {
+        this.uniqueId = this.$el.getAttribute('id') || wwLib.wwUtils.getUid();
     },
     computed: {
         isEditing() {
