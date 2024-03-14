@@ -30,7 +30,6 @@ import { computed, ref } from 'vue';
 export default {
     props: {
         content: { type: Object, required: true },
-        id: { type: String, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
