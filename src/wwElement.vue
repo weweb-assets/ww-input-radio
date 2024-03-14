@@ -45,8 +45,8 @@ export default {
         });
         return { variableValue, setValue, uniqueId: ref(null) };
     },
-    onMounted() {
-        this.uniqueId = this.$el.getAttribute('data-ww-radio-id') || wwLib.wwUtils.getUid();
+    mounted() {
+        this.uniqueId = this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') ||wwLib.wwUtils.getUid();
     },
     computed: {
         isEditing() {
