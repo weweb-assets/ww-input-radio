@@ -1,31 +1,18 @@
 <template>
-    <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio" :data-ww-radio-id="uniqueId">
-        <div v-for="(option, index) in options" :key="`${wwElementState.name}-${uniqueId}-${option.label}`" class="ww-input-radio__container">
-            <wwLayoutItemContext v-if="option" :index="index" is-repeat>
-                <input
-                    :id="`${wwElementState.name}-${uniqueId}-${option.label}`"
-                    :value="option.value"
-                    :checked="option.value === value"
-                    class="ww-input-radio__radio"
-                    :class="{ editing: isEditing }"
-                    type="radio"
-                    :name="`${wwElementState.name}-${uniqueId}`"
-                    :required="content.required"
-                    @input="handleManualInput($event)"
-                />
-                <component
-                    :is="isEditing ? 'div' : 'label'"
-                    :for="`${wwElementState.name}-${uniqueId}-${option.label}`"
-                >
-                    <wwElement v-bind="content.choicesElement" :ww-props="{ text: option.label }" />
-                </component>
-            </wwLayoutItemContext>
-        </div>
-    </div>
+    <input
+        class="ww-input-radio"
+        @change="onChange"
+        :class="{ /* wwEditor:start */ '-editing': isEditing /* wwEditor:end */ }"
+        :name="name"
+        :value="value"
+        :checked="isChecked"
+        :style="style"
+        type="radio"
+    />
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import useWewebRadio from './useWewebRadio';
 
 export default {
     props: {
@@ -34,86 +21,44 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
-        uid: { type: String, required: true },
     },
-    emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
+    emits: ['add-state', 'remove-state'],
     setup(props) {
-        const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
-            uid: props.uid,
-            name: 'value',
-            defaultValue: computed(() => (props.content.value === undefined ? '' : props.content.value)),
-        });
-        return { variableValue, setValue, uniqueId: ref(null) };
-    },
-    mounted() {
-        this.uniqueId = this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') ||wwLib.wwUtils.getUid();
+        const { isChecked, name, value, select } = useWewebRadio(props);
+        return { isChecked, name, value, select };
     },
     computed: {
-        isEditing() {
-            /* wwEditor:start */
-            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
-            /* wwEditor:end */
-            // eslint-disable-next-line no-unreachable
-            return false;
-        },
-        value() {
-            if (!this.options.some(option => option.value === this.variableValue)) return null;
-            return this.variableValue;
-        },
-        options() {
-            if (!this.content.options) return [];
-            let data = wwLib.wwCollection.getCollectionData(this.content.options) || [];
-            if (data && !Array.isArray(data) && typeof data === 'object') {
-                data = new Array(data);
-            } else if ((data && !Array.isArray(data)) || typeof data !== 'object') {
-                return [];
-            }
-
-            return data
-                .filter(item => !!item)
-                .map(item => {
-                    if (typeof item !== 'object') return { label: item, value: item };
-                    return {
-                        label: wwLib.wwLang.getText(_.get(item, this.content.labelField || 'label') || ''),
-                        value: _.get(item, this.content.valueField || 'value'),
-                    };
-                });
-        },
         style() {
             return {
-                flexDirection: this.content.direction,
-                justifyContent: this.content.justifyContent,
-                alignItems: this.content.alignItems,
-                rowGap: this.content.rowGap,
-                columnGap: this.content.columnGap,
-                flexWrap:
-                    this.content.direction === 'column'
-                        ? 'nowrap'
-                        : this.content.flexWrap === false
-                        ? 'nowrap'
-                        : 'wrap',
+                '--outline-color': this.content.outline,
+                '--inside-color': this.content.inside,
+                '--size': this.content.size,
+                '--ringSize': this.content.ringSize,
             };
         },
-    },
-    watch: {
-        /* wwEditor:start */
-        'wwEditorState.boundProps.options'(isBind) {
-            if (!isBind) this.$emit('update:content:effect', { labelField: null, valueField: null });
-        },
-        /* wwEditor:end */
-        'content.value'(newValue) {
-            newValue = `${newValue}`;
-            if (newValue === this.value) return;
-            this.setValue(newValue);
-            this.$emit('trigger-event', { name: 'initValueChange', event: { value: newValue } });
+        isEditing() {
+            /* wwEditor:start */
+            return this.wwEditorState.isEditing;
+            /* wwEditor:end */
         },
     },
     methods: {
-        handleManualInput(event) {
-            const value = event.target.value;
-            if (value === this.value) return;
-            this.setValue(value);
-            this.$emit('trigger-event', { name: 'change', event: { domEvent: event, value } });
+        onChange(event) {
+            if (event.target.checked) {
+                this.select();
+            }
+        },
+    },
+    watch: {
+        isChecked: {
+            handler(isChecked) {
+                if (isChecked) {
+                    this.$emit('add-state', 'checked');
+                } else {
+                    this.$emit('remove-state', 'checked');
+                }
+            },
+            immediate: true,
         },
     },
 };
@@ -121,22 +66,24 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
-    display: flex;
-
-    &__container {
-        padding: 0.4rem 0;
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
+    appearance: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    /* wwEditor:start */
+    &.-editing {
+        pointer-events: none;
     }
-    &__radio {
-        outline: none;
-        margin-right: 0.4rem;
-        /* wwEditor:start */
-        &.editing {
-            pointer-events: none;
-        }
-        /* wwEditor:end */
+    /* wwEditor:end */
+    border-radius: 50%;
+    width: var(--size, 16px);
+    height: var(--size, 16px);
+    border: var(--ringSize, 2px) solid var(--outline-color, black);
+    background: var(--inside-color, transparent);
+    transition: inherit;
+
+    &:checked {
+        border: var(--ringSize, 6px) solid var(--outline-color, black);
     }
 }
 </style>
