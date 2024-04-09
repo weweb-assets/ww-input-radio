@@ -6,7 +6,9 @@
         :name="name"
         :value="value"
         :checked="isChecked"
+        :required="isRequired"
         :style="style"
+        :readonly="isReadonly"
         type="radio"
     />
 </template>
@@ -24,8 +26,8 @@ export default {
     },
     emits: ['add-state', 'remove-state'],
     setup(props) {
-        const { isChecked, name, value, select } = useWewebRadio(props);
-        return { isChecked, name, value, select };
+        const { isChecked, name, value, select, isRequired, isReadonly: isParentReadonly } = useWewebRadio(props);
+        return { isChecked, name, value, select, isParentReadonly, isRequired };
     },
     computed: {
         style() {
@@ -40,6 +42,14 @@ export default {
             /* wwEditor:start */
             return this.wwEditorState.isEditing;
             /* wwEditor:end */
+        },
+        isReadonly() {
+            /* wwEditor:start */
+            if (this.wwEditorState.isSelected) {
+                return this.wwElementState.states.includes('readonly');
+            }
+            /* wwEditor:end */
+            return this.isParentReadonly || this.content.readonly;
         },
     },
     methods: {
@@ -56,6 +66,16 @@ export default {
                     this.$emit('add-state', 'checked');
                 } else {
                     this.$emit('remove-state', 'checked');
+                }
+            },
+            immediate: true,
+        },
+        isReadonly: {
+            handler(value) {
+                if (value) {
+                    this.$emit('add-state', 'readonly');
+                } else {
+                    this.$emit('remove-state', 'readonly');
                 }
             },
             immediate: true,

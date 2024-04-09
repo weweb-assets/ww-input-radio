@@ -48,5 +48,18 @@ export default {
             bindable: true,
             classes: true,
         },
+        readonly: {
+            label: { en: 'Read only', fr: 'Lecture seule' },
+            type: 'OnOff',
+            section: 'settings',
+            bindable: true,
+            defaultValue: false,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'boolean',
+                tooltip: 'A boolean that defines if the input is in readonly: `true | false`',
+            },
+            /* wwEditor:end */
+        },
     },
 };
