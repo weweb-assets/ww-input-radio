@@ -10,7 +10,9 @@
         :style="style"
         :readonly="isReadonly"
         type="radio"
-    />
+    >
+        <wwLayout path="radioLayout"></wwLayout>
+    </input>
 </template>
 
 <script>
@@ -90,10 +92,12 @@ export default {
     outline: none;
     margin: 0;
     padding: 0;
+
     /* wwEditor:start */
     &.-editing {
         pointer-events: none;
     }
+
     /* wwEditor:end */
     border-radius: 50%;
     width: var(--size, 16px);
