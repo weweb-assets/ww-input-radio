@@ -8,6 +8,20 @@ export default {
     },
     states: ['checked', 'readonly'],
     properties: {
+        appearance: {
+            label: 'Appearance',
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { label: 'Simple', value: 'simple', default: true },
+                    { label: 'Custom', value: 'custom' },
+                ],
+            },
+            defaultValue: 'simple',
+            bindable: true,
+            responsive: true,
+            states: true,
+        },
         outline: {
             type: 'Color',
             label: 'Outline color',
@@ -17,6 +31,7 @@ export default {
             states: true,
             bindable: true,
             classes: true,
+            hidden: content => content.appearance !== 'custom',
         },
         inside: {
             type: 'Color',
@@ -27,6 +42,7 @@ export default {
             states: true,
             bindable: true,
             classes: true,
+            hidden: content => content.appearance !== 'custom',
         },
         size: {
             type: 'Length',
@@ -47,6 +63,7 @@ export default {
             states: true,
             bindable: true,
             classes: true,
+            hidden: content => content.appearance !== 'custom',
         },
         readonly: {
             label: { en: 'Read only', fr: 'Lecture seule' },

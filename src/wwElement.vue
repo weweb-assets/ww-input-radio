@@ -2,7 +2,10 @@
     <input
         class="ww-input-radio"
         @change="onChange"
-        :class="{ /* wwEditor:start */ '-editing': isEditing /* wwEditor:end */ }"
+        :class="{
+            /* wwEditor:start */ '-editing': isEditing /* wwEditor:end */,
+            'no-apperance': content.appearance === 'custom',
+        }"
         :name="name"
         :value="value"
         :checked="isChecked"
@@ -31,11 +34,16 @@ export default {
     },
     computed: {
         style() {
+            if (this.content.appearance === 'custom') {
+                return {
+                    '--outline-color': this.content.outline,
+                    '--inside-color': this.content.inside,
+                    '--size': this.content.size,
+                    '--ringSize': this.content.ringSize,
+                };
+            }
             return {
-                '--outline-color': this.content.outline,
-                '--inside-color': this.content.inside,
                 '--size': this.content.size,
-                '--ringSize': this.content.ringSize,
             };
         },
         isEditing() {
@@ -86,10 +94,12 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
-    appearance: none;
     outline: none;
     margin: 0;
     padding: 0;
+    &.no-apperance {
+        appearance: none;
+    }
     /* wwEditor:start */
     &.-editing {
         pointer-events: none;
@@ -98,12 +108,14 @@ export default {
     border-radius: 50%;
     width: var(--size, 16px);
     height: var(--size, 16px);
-    border: var(--ringSize, 2px) solid var(--outline-color, black);
-    background: var(--inside-color, transparent);
+    border: var(--ringSize, 2px) solid;
+    border-color: var(--outline-color, initial);
+    background: var(--inside-color, initial);
     transition: inherit;
 
     &:checked {
-        border: var(--ringSize, 6px) solid var(--outline-color, black);
+        border: var(--ringSize, 6px) solid;
+        border-color: var(--outline-color, initial);
     }
 }
 </style>
