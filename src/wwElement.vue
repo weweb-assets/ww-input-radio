@@ -3,7 +3,9 @@
         class="ww-input-radio"
         @change="onChange"
         :class="{
-            /* wwEditor:start */ '-editing': isEditing /* wwEditor:end */,
+            /* wwEditor:start */
+            '-editing': isEditing,
+            /* wwEditor:end */
             'no-apperance': content.appearance === 'custom',
         }"
         :name="name"
