@@ -13,7 +13,7 @@
         :checked="isChecked"
         :required="isRequired"
         :style="style"
-        :readonly="isReadonly"
+        :disabled="isReadonly"
         type="radio"
     />
 </template>
