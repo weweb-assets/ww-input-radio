@@ -1,250 +1,116 @@
-function getDataObject(options) {
-    if (!options) return {};
-    if (Array.isArray(options)) {
-        return options[0] || {};
-    }
-    return {};
-}
-
 export default {
     editor: {
-        label: 'Form Radio',
+        label: 'Input Radio',
         icon: 'radio',
     },
-    triggerEvents: [
-        { name: 'change', label: 'On Change', event: { value: '' }, default: true },
-        { name: 'initValueChange', label: 'On Init value change', event: { value: '' } },
-    ],
-    customStylePropertiesOrder: ['direction', ['rowGap', 'columnGap'], ['justifyContent', 'alignItems'], 'flexWrap'],
+    options: {
+        autoByContent: true,
+    },
+    states: ['checked', 'readonly'],
     properties: {
-        options: {
-            label: 'Choices values',
-            type: 'Array',
-            section: 'settings',
+        appearance: {
+            label: 'Appearance',
+            type: 'TextSelect',
             options: {
-                item: {
-                    type: 'Object',
-                    options: {
-                        item: {
-                            label: {
-                                label: 'Label',
-                                type: 'Text',
-                                options: { placeholder: 'Label' },
-                            },
-                            value: {
-                                label: 'Value',
-                                type: 'Text',
-                                options: { placeholder: 'Value' },
-                            },
-                        },
-                    },
-                },
+                options: [
+                    { label: 'Simple', value: 'simple', default: true },
+                    { label: 'Custom', value: 'custom' },
+                ],
             },
-            defaultValue: [
-                { value: 'first value', label: 'first label' },
-                { value: 'second value', label: 'second label' },
-            ],
-            multilang: true,
+            defaultValue: 'simple',
             bindable: true,
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'array',
-                tooltip:
-                    'A collection of data in array format: \n\n `[{}, {}, ...] || ["string1", "string2", ...] || [1, 2, ...]`',
-            },
-            /* wwEditor:end */
-        },
-        value: {
-            label: {
-                en: 'Init value',
-            },
-            type: 'Text',
-            section: 'settings',
-            bindable: true,
-            defaultValue: '',
+            responsive: true,
+            states: true,
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
-                tooltip: 'A string that defines the initial value: `"first value"`',
+                tooltip: 'The appearance of the radio input: `simple | custom`',
             },
             /* wwEditor:end */
         },
-        labelField: {
-            hidden: (content, _sidepanelContent, boundProps) => {
-                const options = wwLib.wwCollection.getCollectionData(content.options);
-                return !boundProps.options || !options || (options && typeof options[0] !== 'object');
+        outline: {
+            type: 'Color',
+            label: 'Outline color',
+            options: {
+                nullable: true,
             },
-            label: 'Label field',
-            type: 'ObjectPropertyPath',
-            options: content => ({
-                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
-            }),
-            defaultValue: null,
-            section: 'settings',
-        },
-        valueField: {
-            hidden: (content, _sidepanelContent, boundProps) => {
-                const options = wwLib.wwCollection.getCollectionData(content.options);
-                return !boundProps.options || !options || (options && typeof options[0] !== 'object');
+            states: true,
+            bindable: true,
+            classes: true,
+            hidden: content => content.appearance !== 'custom',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip:
+                    'You need to set a string representing a **color** value. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value">[MDN Doc]</a>`',
             },
-            label: 'Value field',
-            type: 'ObjectPropertyPath',
-            options: content => ({
-                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
-            }),
-            defaultValue: null,
-            section: 'settings',
+            /* wwEditor:end */
         },
-        choicesElement: {
-            hidden: true,
-            defaultValue: { isWwObject: true, type: 'ww-text' },
+        inside: {
+            type: 'Color',
+            label: 'Inside color',
+            options: {
+                nullable: true,
+            },
+            states: true,
+            bindable: true,
+            classes: true,
+            hidden: content => content.appearance !== 'custom',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip:
+                    'You need to set a string representing a **color** value. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value">[MDN Doc]</a>`',
+            },
+            /* wwEditor:end */
         },
-        required: {
-            label: 'Required',
+        size: {
+            type: 'Length',
+            label: 'Size',
+            options: {
+                noRange: true,
+            },
+            states: true,
+            bindable: true,
+            classes: true,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip:
+                    'You need to set a string representing a **length** value. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/length" target="_blank">[MDN Doc]</a>`',
+            },
+            /* wwEditor:end */
+        },
+        ringSize: {
+            type: 'Length',
+            label: 'Outline width',
+            options: {
+                noRange: true,
+            },
+            states: true,
+            bindable: true,
+            classes: true,
+            hidden: content => content.appearance !== 'custom',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip:
+                    'You need to set a string representing a **length** value. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/length" target="_blank">[MDN Doc]</a>`',
+            },
+            /* wwEditor:end */
+        },
+        readonly: {
+            label: { en: 'Read only', fr: 'Lecture seule' },
             type: 'OnOff',
             section: 'settings',
-            defaultValue: true,
             bindable: true,
+            defaultValue: false,
             /* wwEditor:start */
             bindingValidation: {
                 type: 'boolean',
-                tooltip: 'A boolean that defines if the input is required: `true | false`',
+                tooltip: 'A boolean that defines if the input is in readonly: `true | false`',
             },
             /* wwEditor:end */
-        },
-        direction: {
-            label: 'Direction',
-            type: 'BigIconRadioGroup',
-            options: {
-                choices: [
-                    { icon: 'arrow-down', value: 'column', label: 'Vertical' },
-                    { icon: 'arrow-right', value: 'row', label: 'Horizontal' },
-                ],
-            },
-            responsive: true,
-            states: true,
-            classes: true,
-            defaultValue: 'column',
-        },
-        rowGap: {
-            label: 'Rows gap',
-            type: 'Length',
-            options: {
-                unitChoices: [
-                    { value: 'px', label: 'px', min: 0, max: 100 },
-                    { value: '%', label: '%', min: 0, max: 100, digits: 2 },
-                    { value: 'em', label: 'em', min: 0, max: 10, digits: 2 },
-                    { value: 'rem', label: 'rem', min: 0, max: 10, digits: 2 },
-                ],
-            },
-            responsive: true,
-            states: true,
-            classes: true,
-        },
-        columnGap: {
-            label: 'Columns gap',
-            type: 'Length',
-            options: {
-                unitChoices: [
-                    { value: 'px', label: 'px', min: 0, max: 100 },
-                    { value: '%', label: '%', min: 0, max: 100, digits: 2 },
-                    { value: 'em', label: 'em', min: 0, max: 10, digits: 2 },
-                    { value: 'rem', label: 'rem', min: 0, max: 10, digits: 2 },
-                ],
-            },
-            responsive: true,
-            states: true,
-            classes: true,
-        },
-        justifyContent: {
-            label: 'Justify',
-            type: 'TextRadioGroup',
-            options: content => {
-                if (content.direction === 'row') {
-                    return {
-                        choices: [
-                            { value: 'flex-start', title: 'Start', icon: 'align-x-start' },
-                            { value: 'center', title: 'Center', icon: 'align-x-center' },
-                            { value: 'flex-end', title: 'End', icon: 'align-x-end' },
-                            {
-                                value: 'space-around',
-                                title: 'Space around',
-                                icon: 'align-x-space-around',
-                            },
-                            {
-                                value: 'space-between',
-                                title: 'Space between',
-                                icon: 'align-x-space-between',
-                            },
-                        ],
-                    };
-                } else {
-                    return {
-                        choices: [
-                            {
-                                value: 'flex-start',
-                                title: 'Start',
-                                icon: 'align-x-start-vertical',
-                            },
-                            { value: 'center', title: 'Center', icon: 'align-x-center-vertical' },
-                            { value: 'flex-end', title: 'End', icon: 'align-x-end-vertical' },
-                            {
-                                value: 'space-around',
-                                title: 'Space around',
-                                icon: 'align-x-space-around-vertical',
-                            },
-                            {
-                                value: 'space-between',
-                                title: 'Space between',
-                                icon: 'align-x-space-between-vertical',
-                            },
-                        ],
-                    };
-                }
-            },
-            responsive: true,
-            states: true,
-            classes: true,
-            defaultValue: 'center',
-        },
-        alignItems: {
-            label: 'Alignment',
-            type: 'TextRadioGroup',
-            options: content => {
-                if (content.direction === 'row') {
-                    return {
-                        choices: [
-                            { value: 'flex-start', title: 'Start', icon: 'align-y-start' },
-                            { value: 'center', title: 'Center', icon: 'align-y-center' },
-                            { value: 'flex-end', title: 'End', icon: 'align-y-end' },
-                            { value: 'stretch', title: 'Stretch', icon: 'align-y-stretch' },
-                            { value: 'baseline', title: 'Baseline', icon: 'align-y-baseline' },
-                        ],
-                    };
-                } else {
-                    return {
-                        choices: [
-                            { value: 'flex-start', title: 'Start', icon: 'align-x-start' },
-                            { value: 'center', title: 'Center', icon: 'align-x-center' },
-                            { value: 'flex-end', title: 'End', icon: 'align-x-end' },
-                            { value: 'stretch', title: 'Stretch', icon: 'align-x-stretch' },
-                        ],
-                    };
-                }
-            },
-            responsive: true,
-            states: true,
-            classes: true,
-            defaultValue: 'flex-start',
-        },
-        flexWrap: {
-            label: 'Wrap elements',
-            type: 'OnOff',
-            hidden: content => content.direction !== 'row',
-            responsive: true,
-            states: true,
-            classes: true,
-            defaultValue: true,
         },
     },
 };
