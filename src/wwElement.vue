@@ -1,7 +1,7 @@
 <template>
     <input
         class="ww-input-radio"
-        @change="onChange"
+        v-model="isInternalChecked"
         :class="{
             /* wwEditor:start */
             '-editing': isEditing,
@@ -10,10 +10,11 @@
         }"
         :name="name"
         :value="value"
-        :checked="isChecked"
         :required="isRequired"
         :style="style"
+        :checked="isChecked"
         :disabled="isReadonly"
+        ww-responsive="radio-input"
         type="radio"
     />
 </template>
@@ -35,6 +36,16 @@ export default {
         return { isChecked, name, value, select, isParentReadonly, isRequired };
     },
     computed: {
+        isInternalChecked: {
+            get() {
+                return this.isChecked;
+            },
+            set(value) {
+                if (value) {
+                    this.select();
+                }
+            },
+        },
         style() {
             if (this.content.appearance === 'custom') {
                 return {
@@ -60,13 +71,6 @@ export default {
             }
             /* wwEditor:end */
             return this.isParentReadonly || this.content.readonly;
-        },
-    },
-    methods: {
-        onChange(event) {
-            if (event.target.checked) {
-                this.select();
-            }
         },
     },
     watch: {
