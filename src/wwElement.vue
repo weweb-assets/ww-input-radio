@@ -1,7 +1,7 @@
 <template>
     <input
         class="ww-input-radio"
-        @change="onChange"
+        @update:modelValue="onChange"
         :class="{
             /* wwEditor:start */
             '-editing': isEditing,
@@ -10,10 +10,12 @@
         }"
         :name="name"
         :value="value"
-        :checked="isChecked"
+        :modelValue="isChecked"
         :required="isRequired"
         :style="style"
+        :checked="isChecked"
         :disabled="isReadonly"
+        ww-responsive
         type="radio"
     />
 </template>
