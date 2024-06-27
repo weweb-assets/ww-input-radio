@@ -71,26 +71,26 @@ export default {
         },
         labelField: {
             hidden: (content, _sidepanelContent, boundProps) => {
-                const options = wwLib.wwCollection.getCollectionData(content.options);
+                const options = wwLib.wwUtils.getDataFromCollection(content.options);
                 return !boundProps.options || !options || (options && typeof options[0] !== 'object');
             },
             label: 'Label field',
             type: 'ObjectPropertyPath',
             options: content => ({
-                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
+                object: getDataObject(wwLib.wwUtils.getDataFromCollection(content.options)),
             }),
             defaultValue: null,
             section: 'settings',
         },
         valueField: {
             hidden: (content, _sidepanelContent, boundProps) => {
-                const options = wwLib.wwCollection.getCollectionData(content.options);
+                const options = wwLib.wwUtils.getDataFromCollection(content.options);
                 return !boundProps.options || !options || (options && typeof options[0] !== 'object');
             },
             label: 'Value field',
             type: 'ObjectPropertyPath',
             options: content => ({
-                object: getDataObject(wwLib.wwCollection.getCollectionData(content.options)),
+                object: getDataObject(wwLib.wwUtils.getDataFromCollection(content.options)),
             }),
             defaultValue: null,
             section: 'settings',

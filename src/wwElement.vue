@@ -1,6 +1,10 @@
 <template>
     <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio" :data-ww-radio-id="uniqueId">
-        <div v-for="(option, index) in options" :key="`${wwElementState.name}-${uniqueId}-${option.label}`" class="ww-input-radio__container">
+        <div
+            v-for="(option, index) in options"
+            :key="`${wwElementState.name}-${uniqueId}-${option.label}`"
+            class="ww-input-radio__container"
+        >
             <wwLayoutItemContext v-if="option" :index="index" is-repeat>
                 <input
                     :id="`${wwElementState.name}-${uniqueId}-${option.label}`"
@@ -46,7 +50,8 @@ export default {
         return { variableValue, setValue, uniqueId: ref(null) };
     },
     mounted() {
-        this.uniqueId = this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') ||wwLib.wwUtils.getUid();
+        this.uniqueId =
+            this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') || wwLib.wwUtils.getUid();
     },
     computed: {
         isEditing() {
@@ -62,7 +67,7 @@ export default {
         },
         options() {
             if (!this.content.options) return [];
-            let data = wwLib.wwCollection.getCollectionData(this.content.options) || [];
+            let data = wwLib.wwUtils.getDataFromCollection(this.content.options) || [];
             if (data && !Array.isArray(data) && typeof data === 'object') {
                 data = new Array(data);
             } else if ((data && !Array.isArray(data)) || typeof data !== 'object') {
