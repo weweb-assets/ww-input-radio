@@ -112,6 +112,18 @@ export default {
             },
             /* wwEditor:end */
         },
+        name: {
+            label: 'Input name',
+            type: 'Text',
+            section: 'settings',
+            defaultValue: '',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'A string that defines the name of the input: `"name"`',
+            },
+            /* wwEditor:end */
+        },
         direction: {
             label: 'Direction',
             type: 'BigIconRadioGroup',

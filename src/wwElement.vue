@@ -1,6 +1,10 @@
 <template>
     <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio" :data-ww-radio-id="uniqueId">
-        <div v-for="(option, index) in options" :key="`${wwElementState.name}-${uniqueId}-${option.label}`" class="ww-input-radio__container">
+        <div
+            v-for="(option, index) in options"
+            :key="`${wwElementState.name}-${uniqueId}-${option.label}`"
+            class="ww-input-radio__container"
+        >
             <wwLayoutItemContext v-if="option" :index="index" is-repeat>
                 <input
                     :id="`${wwElementState.name}-${uniqueId}-${option.label}`"
@@ -9,7 +13,7 @@
                     class="ww-input-radio__radio"
                     :class="{ editing: isEditing }"
                     type="radio"
-                    :name="`${wwElementState.name}-${uniqueId}`"
+                    :name="name"
                     :required="content.required"
                     @input="handleManualInput($event)"
                 />
@@ -46,7 +50,8 @@ export default {
         return { variableValue, setValue, uniqueId: ref(null) };
     },
     mounted() {
-        this.uniqueId = this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') ||wwLib.wwUtils.getUid();
+        this.uniqueId =
+            this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') || wwLib.wwUtils.getUid();
     },
     computed: {
         isEditing() {
@@ -93,6 +98,9 @@ export default {
                         ? 'nowrap'
                         : 'wrap',
             };
+        },
+        name() {
+            return this.content.name?.length ? this.content.name : `${this.wwElementState.name}-${this.uniqueId}`;
         },
     },
     watch: {
