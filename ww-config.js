@@ -11,6 +11,9 @@ export default {
         label: 'Form Radio',
         icon: 'radio',
     },
+    options: {
+        displayAllowedValues: ['flex', 'inline-flex'],
+    },
     triggerEvents: [
         { name: 'change', label: 'On Change', event: { value: '' }, default: true },
         { name: 'initValueChange', label: 'On Init value change', event: { value: '' } },

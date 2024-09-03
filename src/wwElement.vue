@@ -1,6 +1,10 @@
 <template>
     <div class="ww-input-radio" :style="style" ww-responsive="ww-input-radio" :data-ww-radio-id="uniqueId">
-        <div v-for="(option, index) in options" :key="`${wwElementState.name}-${uniqueId}-${option.label}`" class="ww-input-radio__container">
+        <div
+            v-for="(option, index) in options"
+            :key="`${wwElementState.name}-${uniqueId}-${option.label}`"
+            class="ww-input-radio__container"
+        >
             <wwLayoutItemContext v-if="option" :index="index" is-repeat>
                 <input
                     :id="`${wwElementState.name}-${uniqueId}-${option.label}`"
@@ -46,7 +50,8 @@ export default {
         return { variableValue, setValue, uniqueId: ref(null) };
     },
     mounted() {
-        this.uniqueId = this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') ||wwLib.wwUtils.getUid();
+        this.uniqueId =
+            this.$el.getAttribute('id') || this.$el.getAttribute('data-ww-radio-id') || wwLib.wwUtils.getUid();
     },
     computed: {
         isEditing() {
@@ -121,20 +126,22 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
-    display: flex;
-
     &__container {
         padding: 0.4rem 0;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
+        position: relative;
     }
     &__radio {
         outline: none;
         margin-right: 0.4rem;
         /* wwEditor:start */
-        &.editing {
-            pointer-events: none;
+        &.editing::after {
+            display: block;
+            content: '';
+            position: absolute;
+            inset: 0;
         }
         /* wwEditor:end */
     }
