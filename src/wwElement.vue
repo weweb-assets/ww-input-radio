@@ -30,10 +30,19 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['add-state', 'remove-state'],
+    emits: ['add-state', 'remove-state', 'update:sidepanel-content'],
     setup(props) {
-        const { isChecked, name, value, select, isRequired, isReadonly: isParentReadonly } = useWewebRadio(props);
-        return { isChecked, name, value, select, isParentReadonly, isRequired };
+        const {
+            isChecked,
+            name,
+            value,
+            select,
+            isRequired,
+            isReadonly: isParentReadonly,
+            repeat,
+        } = useWewebRadio(props);
+
+        return { isChecked, name, value, select, isParentReadonly, isRequired, repeat };
     },
     computed: {
         isInternalChecked: {
@@ -94,6 +103,16 @@ export default {
             },
             immediate: true,
         },
+        /* wwEditor:start */
+        repeat: {
+            handler(value) {
+                console.log('fromRadiogroupRepeat', value);
+                this.$emit('update:sidepanel-content', { value, path: 'fromRadiogroupRepeat' });
+                console.log('sidepanelContent', this.wwEditorState.sidepanelContent);
+            },
+            immediate: true,
+        },
+        /* wwEditor:end */
     },
 };
 </script>
