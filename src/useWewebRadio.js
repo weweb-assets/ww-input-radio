@@ -5,7 +5,7 @@ export default function useWewebRadio(props) {
         isChecked: inject('_wwRadioIsChecked', ref(false)),
         isReadonly: inject('_wwRadioIsReadonly', ref(false)),
         isRequired: inject('_wwRadioIsRequired', ref(false)),
-        repeat: inject('_wwRepeat', ref(false)),
+        isDisabled: inject('_wwRadioIsDisabled', ref(false)),
         name: inject(
             '_wwRadioName',
             computed(() => props.content.name)

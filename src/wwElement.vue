@@ -13,7 +13,7 @@
         :required="isRequired"
         :style="style"
         :checked="isChecked"
-        :disabled="isReadonly"
+        :disabled="isReadonly || isDisabled"
         ww-responsive="radio-input"
         type="radio"
     />
@@ -39,10 +39,11 @@ export default {
             select,
             isRequired,
             isReadonly: isParentReadonly,
+            isDisabled,
             repeat,
         } = useWewebRadio(props);
 
-        return { isChecked, name, value, select, isParentReadonly, isRequired, repeat };
+        return { isChecked, name, value, select, isParentReadonly, isDisabled, isRequired, repeat };
     },
     computed: {
         isInternalChecked: {
@@ -103,16 +104,6 @@ export default {
             },
             immediate: true,
         },
-        /* wwEditor:start */
-        repeat: {
-            handler(value) {
-                console.log('fromRadiogroupRepeat', value);
-                this.$emit('update:sidepanel-content', { value, path: 'fromRadiogroupRepeat' });
-                console.log('sidepanelContent', this.wwEditorState.sidepanelContent);
-            },
-            immediate: true,
-        },
-        /* wwEditor:end */
     },
 };
 </script>

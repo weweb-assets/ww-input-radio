@@ -99,26 +99,6 @@ export default {
             },
             /* wwEditor:end */
         },
-        value: {
-            label: { en: 'Value' },
-            type: 'Text',
-            section: 'settings',
-            bindable: true,
-            hidden: (content, sidePanelContent, boundProps, wwProps) => sidePanelContent.fromRadiogroupRepeat,
-        },
-        disabled: {
-            label: { en: 'Disabled' },
-            type: 'OnOff',
-            section: 'settings',
-            bindable: true,
-            defaultValue: false,
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'boolean',
-                tooltip: 'A boolean that defines if the input is disabled: `true | false`',
-            },
-            /* wwEditor:end */
-        },
         readonly: {
             label: { en: 'Read only', fr: 'Lecture seule' },
             type: 'OnOff',
