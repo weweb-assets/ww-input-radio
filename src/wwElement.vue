@@ -30,7 +30,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['add-state', 'remove-state', 'update:sidepanel-content'],
+    emits: ['add-state', 'remove-state'],
     setup(props) {
         const {
             isChecked,
