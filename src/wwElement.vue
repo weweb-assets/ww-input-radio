@@ -40,10 +40,9 @@ export default {
             isRequired,
             isReadonly: isParentReadonly,
             isDisabled,
-            repeat,
         } = useWewebRadio(props);
 
-        return { isChecked, name, value, select, isParentReadonly, isDisabled, isRequired, repeat };
+        return { isChecked, name, value, select, isParentReadonly, isDisabled, isRequired };
     },
     computed: {
         isInternalChecked: {
