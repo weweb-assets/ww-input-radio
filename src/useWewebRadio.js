@@ -10,7 +10,7 @@ export default function useWewebRadio(props) {
             '_wwRadioName',
             computed(() => props.content.name)
         ),
-        value: inject('_wwRadioValue', undefined),
+        value: inject('_wwRadioItemValue', undefined),
         select: inject('_wwRadioSelect', () => {}),
     };
 }
