@@ -12,5 +12,7 @@ export default function useWewebRadio(props) {
         ),
         value: inject('_wwRadioItemValue', undefined),
         select: inject('_wwRadioSelect', () => {}),
+        clicked: inject('_wwRadioItemClicked', ref(false)),
+        resetClicked: inject('_wwRadioItemResetClicked', () => {}),
     };
 }

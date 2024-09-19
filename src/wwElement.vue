@@ -1,6 +1,7 @@
 <template>
     <input
         class="ww-input-radio"
+        ref="inputRef"
         v-model="isInternalChecked"
         :class="{
             /* wwEditor:start */
@@ -22,6 +23,8 @@
 <script>
 import useWewebRadio from './useWewebRadio';
 
+import { ref, watch } from 'vue';
+
 export default {
     props: {
         content: { type: Object, required: true },
@@ -32,6 +35,8 @@ export default {
     },
     emits: ['add-state', 'remove-state'],
     setup(props) {
+        const inputRef = ref(null);
+
         const {
             isChecked,
             name,
@@ -40,9 +45,18 @@ export default {
             isRequired,
             isReadonly: isParentReadonly,
             isDisabled,
+            clicked,
+            resetClicked,
         } = useWewebRadio(props);
 
-        return { isChecked, name, value, select, isParentReadonly, isDisabled, isRequired };
+        watch(clicked, value => {
+            if (value) {
+                inputRef.value.focus();
+                resetClicked();
+            }
+        });
+
+        return { inputRef, isChecked, name, value, select, isParentReadonly, isDisabled, isRequired };
     },
     computed: {
         isInternalChecked: {
@@ -54,19 +68,6 @@ export default {
                     this.select();
                 }
             },
-        },
-        style() {
-            if (this.content.appearance === 'custom') {
-                return {
-                    '--outline-color': this.content.outline,
-                    '--inside-color': this.content.inside,
-                    '--size': this.content.size,
-                    '--ringSize': this.content.ringSize,
-                };
-            }
-            return {
-                '--size': this.content.size,
-            };
         },
         isEditing() {
             /* wwEditor:start */
@@ -109,9 +110,6 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
-    outline: none;
-    margin: 0;
-    padding: 0;
     &.no-apperance {
         appearance: none;
     }
@@ -120,17 +118,5 @@ export default {
         pointer-events: none;
     }
     /* wwEditor:end */
-    border-radius: 50%;
-    width: var(--size, 16px);
-    height: var(--size, 16px);
-    border: var(--ringSize, 2px) solid;
-    border-color: var(--outline-color, initial);
-    background: var(--inside-color, initial);
-    transition: inherit;
-
-    &:checked {
-        border: var(--ringSize, 6px) solid;
-        border-color: var(--outline-color, initial);
-    }
 }
 </style>
