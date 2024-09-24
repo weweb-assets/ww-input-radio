@@ -1,19 +1,16 @@
 <template>
     <input
         class="ww-input-radio"
+        ref="inputRef"
         v-model="isInternalChecked"
-        :class="{
-            /* wwEditor:start */
-            '-editing': isEditing,
-            /* wwEditor:end */
-            'no-apperance': content.appearance === 'custom',
-        }"
+        :class="{ 'no-apperance': content.appearance === 'custom' }"
         :name="name"
         :value="value"
         :required="isRequired"
         :style="style"
         :checked="isChecked"
-        :disabled="isReadonly"
+        :disabled="isDisabled"
+        :readonly="isReadonly || isEditing"
         ww-responsive="radio-input"
         type="radio"
     />
@@ -21,6 +18,8 @@
 
 <script>
 import useWewebRadio from './useWewebRadio';
+
+import { ref, watch } from 'vue';
 
 export default {
     props: {
@@ -32,8 +31,28 @@ export default {
     },
     emits: ['add-state', 'remove-state'],
     setup(props) {
-        const { isChecked, name, value, select, isRequired, isReadonly: isParentReadonly } = useWewebRadio(props);
-        return { isChecked, name, value, select, isParentReadonly, isRequired };
+        const inputRef = ref(null);
+
+        const {
+            isChecked,
+            name,
+            value,
+            select,
+            isRequired,
+            isReadonly: isParentReadonly,
+            isDisabled,
+            clicked,
+            resetClicked,
+        } = useWewebRadio(props);
+
+        watch(clicked, value => {
+            if (value) {
+                inputRef.value.focus();
+                resetClicked();
+            }
+        });
+
+        return { inputRef, isChecked, name, value, select, isParentReadonly, isDisabled, isRequired };
     },
     computed: {
         isInternalChecked: {
@@ -42,22 +61,9 @@ export default {
             },
             set(value) {
                 if (value) {
-                    this.select();
+                    if (!this.isEditing) this.select();
                 }
             },
-        },
-        style() {
-            if (this.content.appearance === 'custom') {
-                return {
-                    '--outline-color': this.content.outline,
-                    '--inside-color': this.content.inside,
-                    '--size': this.content.size,
-                    '--ringSize': this.content.ringSize,
-                };
-            }
-            return {
-                '--size': this.content.size,
-            };
         },
         isEditing() {
             /* wwEditor:start */
@@ -100,28 +106,8 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
-    outline: none;
-    margin: 0;
-    padding: 0;
     &.no-apperance {
         appearance: none;
-    }
-    /* wwEditor:start */
-    &.-editing {
-        pointer-events: none;
-    }
-    /* wwEditor:end */
-    border-radius: 50%;
-    width: var(--size, 16px);
-    height: var(--size, 16px);
-    border: var(--ringSize, 2px) solid;
-    border-color: var(--outline-color, initial);
-    background: var(--inside-color, initial);
-    transition: inherit;
-
-    &:checked {
-        border: var(--ringSize, 6px) solid;
-        border-color: var(--outline-color, initial);
     }
 }
 </style>
