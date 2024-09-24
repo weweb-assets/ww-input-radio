@@ -3,18 +3,14 @@
         class="ww-input-radio"
         ref="inputRef"
         v-model="isInternalChecked"
-        :class="{
-            /* wwEditor:start */
-            '-editing': isEditing,
-            /* wwEditor:end */
-            'no-apperance': content.appearance === 'custom',
-        }"
+        :class="{ 'no-apperance': content.appearance === 'custom' }"
         :name="name"
         :value="value"
         :required="isRequired"
         :style="style"
         :checked="isChecked"
-        :disabled="isReadonly || isDisabled"
+        :disabled="isDisabled"
+        :readonly="isReadonly || isEditing"
         ww-responsive="radio-input"
         type="radio"
     />
@@ -113,18 +109,5 @@ export default {
     &.no-apperance {
         appearance: none;
     }
-    /* wwEditor:start */
-    &.-editing {
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-        }
-    }
-    /* wwEditor:end */
 }
 </style>
