@@ -65,7 +65,7 @@ export default {
             },
             set(value) {
                 if (value) {
-                    this.select();
+                    if (!this.isEditing) this.select();
                 }
             },
         },
