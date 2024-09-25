@@ -68,7 +68,7 @@ export default {
         },
         options() {
             if (!this.content.options) return [];
-            let data = wwLib.wwCollection.getCollectionData(this.content.options) || [];
+            let data = wwLib.wwUtils.getDataFromCollection(this.content.options) || [];
             if (data && !Array.isArray(data) && typeof data === 'object') {
                 data = new Array(data);
             } else if ((data && !Array.isArray(data)) || typeof data !== 'object') {
