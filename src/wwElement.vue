@@ -13,7 +13,7 @@
                     class="ww-input-radio__radio"
                     :class="{ editing: isEditing }"
                     type="radio"
-                    :name="`${wwElementState.name}-${uniqueId}`"
+                    :name="name"
                     :required="content.required"
                     :readonly="isEditing"
                     @input="handleManualInput($event)"
@@ -99,6 +99,9 @@ export default {
                         ? 'nowrap'
                         : 'wrap',
             };
+        },
+        name() {
+            return this.content.name?.length ? this.content.name : `${this.wwElementState.name}-${this.uniqueId}`;
         },
     },
     watch: {
