@@ -1,10 +1,10 @@
 <template>
-    <div class="ww-input-radio-wrapper">
+    <div class="ww-input-radio-wrapper" v-bind="wrapperAttrs">
         <input
             class="ww-input-radio"
             ref="inputRef"
             v-model="isInternalChecked"
-            v-bind="$attrs"
+            :style="$attrs.style"
             :class="{ 'no-apperance': content.appearance === 'custom' }"
             :name="name"
             :value="value"
@@ -82,6 +82,11 @@ export default {
             }
             /* wwEditor:end */
             return this.isParentReadonly || this.content.readonly;
+        },
+        wrapperAttrs() {
+            // Get all attributes except style
+            const { style, ...rest } = this.$attrs;
+            return rest;
         },
     },
     watch: {
