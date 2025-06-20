@@ -1,9 +1,10 @@
 <template>
-    <div class="ww-input-radio-wrapper" :style="style">
+    <div class="ww-input-radio-wrapper">
         <input
             class="ww-input-radio"
             ref="inputRef"
             v-model="isInternalChecked"
+            v-bind="$attrs"
             :class="{ 'no-apperance': content.appearance === 'custom' }"
             :name="name"
             :value="value"
@@ -14,6 +15,8 @@
             ww-responsive="radio-input"
             type="radio"
         />
+        <!-- Editor click overlay -->
+        <div v-if="isEditing" class="ww-editor-click-overlay"></div>
     </div>
 </template>
 
@@ -23,6 +26,7 @@ import useWewebRadio from './useWewebRadio';
 import { ref, watch } from 'vue';
 
 export default {
+    inheritAttrs: false,
     props: {
         content: { type: Object, required: true },
         /* wwEditor:start */
@@ -107,16 +111,11 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    display: inline-block;
 }
 
 .ww-input-radio {
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    
     &:focus-visible {
         outline: none;
     }
@@ -125,4 +124,18 @@ export default {
         appearance: none;
     }
 }
+
+/* wwEditor:start */
+.ww-editor-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    cursor: pointer;
+    // Transparent but clickable
+    background: transparent;
+}
+/* wwEditor:end */
 </style>
