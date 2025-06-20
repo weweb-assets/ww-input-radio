@@ -13,6 +13,7 @@
         :readonly="isReadonly || isEditing"
         ww-responsive="radio-input"
         type="radio"
+        @click="handleClick"
     />
 </template>
 
@@ -77,6 +78,28 @@ export default {
             }
             /* wwEditor:end */
             return this.isParentReadonly || this.content.readonly;
+        },
+    },
+    methods: {
+        handleClick(event) {
+            /* wwEditor:start */
+            // In editor mode, manually bubble the event if readonly
+            if (this.isEditing && this.isReadonly) {
+                console.log('[Radio Debug] Click on readonly radio in editor, manually bubbling event');
+                // Create a new click event that bubbles
+                const newEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                    clientX: event.clientX,
+                    clientY: event.clientY,
+                });
+                // Dispatch on parent element to ensure it bubbles up
+                if (this.$el.parentElement) {
+                    this.$el.parentElement.dispatchEvent(newEvent);
+                }
+            }
+            /* wwEditor:end */
         },
     },
     watch: {
