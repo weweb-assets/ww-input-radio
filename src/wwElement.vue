@@ -113,5 +113,10 @@ export default {
     &.no-apperance {
         appearance: none;
     }
+    
+    /* wwEditor:start */
+    // Force pointer events in editor to allow selection
+    pointer-events: auto !important;
+    /* wwEditor:end */
 }
 </style>
