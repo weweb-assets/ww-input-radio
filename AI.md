@@ -1,6 +1,6 @@
 ---
 name: ww-input-radio
-description: A customizable radio button input component for single option selection
+description: A customizable radio button input component for single option selection. Requires the ww-radiogroup component to be integrated.
 keywords: [radio, form, input, button, selection, choice]
 ---
 

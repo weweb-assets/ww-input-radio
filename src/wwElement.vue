@@ -5,7 +5,7 @@
             ref="inputRef"
             v-model="isInternalChecked"
             :style="$attrs.style"
-            :class="{ 'no-apperance': content.appearance === 'custom' }"
+            :class="{ 'no-appearance': content.appearance === 'custom' }"
             :name="name"
             :value="value"
             :required="isRequired"
@@ -125,7 +125,7 @@ export default {
         outline: none;
     }
     
-    &.no-apperance {
+    &.no-appearance {
         appearance: none;
     }
 }
