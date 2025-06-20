@@ -1,20 +1,24 @@
 <template>
-    <input
-        class="ww-input-radio"
-        ref="inputRef"
-        v-model="isInternalChecked"
-        :class="{ 'no-apperance': content.appearance === 'custom' }"
-        :name="name"
-        :value="value"
-        :required="isRequired"
-        :style="style"
-        :checked="isChecked"
-        :disabled="isDisabled"
-        :readonly="isReadonly || isEditing"
-        ww-responsive="radio-input"
-        type="radio"
-        @click="handleClick"
-    />
+    <div class="ww-input-radio-wrapper" :style="wrapperStyle">
+        <input
+            class="ww-input-radio"
+            ref="inputRef"
+            v-model="isInternalChecked"
+            :class="{ 'no-apperance': content.appearance === 'custom' }"
+            :name="name"
+            :value="value"
+            :required="isRequired"
+            :style="inputStyle"
+            :checked="isChecked"
+            :disabled="isDisabled"
+            :readonly="isReadonly || isEditing"
+            ww-responsive="radio-input"
+            type="radio"
+            @click="handleClick"
+        />
+        <!-- Editor click overlay -->
+        <div v-if="isEditing" class="ww-editor-click-overlay" @click="handleEditorClick"></div>
+    </div>
 </template>
 
 <script>
@@ -79,26 +83,26 @@ export default {
             /* wwEditor:end */
             return this.isParentReadonly || this.content.readonly;
         },
+        wrapperStyle() {
+            return {
+                position: 'relative',
+                display: 'inline-block',
+                ...this.style
+            };
+        },
+        inputStyle() {
+            // Return empty object since styles are now on wrapper
+            return {};
+        },
     },
     methods: {
         handleClick(event) {
+            // Keep original functionality
+        },
+        handleEditorClick(event) {
             /* wwEditor:start */
-            // In editor mode, manually bubble the event if readonly
-            if (this.isEditing && this.isReadonly) {
-                console.log('[Radio Debug] Click on readonly radio in editor, manually bubbling event');
-                // Create a new click event that bubbles
-                const newEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window,
-                    clientX: event.clientX,
-                    clientY: event.clientY,
-                });
-                // Dispatch on parent element to ensure it bubbles up
-                if (this.$el.parentElement) {
-                    this.$el.parentElement.dispatchEvent(newEvent);
-                }
-            }
+            // Let the click bubble naturally for editor selection
+            console.log('[Radio Debug] Editor overlay clicked');
             /* wwEditor:end */
         },
     },
@@ -128,6 +132,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ww-input-radio-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .ww-input-radio {
     &:focus-visible {
         outline: none;
@@ -136,10 +145,19 @@ export default {
     &.no-apperance {
         appearance: none;
     }
-    
-    /* wwEditor:start */
-    // Force pointer events in editor to allow selection
-    pointer-events: auto !important;
-    /* wwEditor:end */
 }
+
+/* wwEditor:start */
+.ww-editor-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    cursor: pointer;
+    // Transparent but clickable
+    background: transparent;
+}
+/* wwEditor:end */
 </style>
