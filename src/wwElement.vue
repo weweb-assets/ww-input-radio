@@ -106,6 +106,10 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio {
+    &:focus-visible {
+        outline: none;
+    }
+    
     &.no-apperance {
         appearance: none;
     }
