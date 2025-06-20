@@ -1,5 +1,5 @@
 <template>
-    <div class="ww-input-radio-wrapper" :style="wrapperStyle">
+    <div class="ww-input-radio-wrapper" :style="style">
         <input
             class="ww-input-radio"
             ref="inputRef"
@@ -8,16 +8,12 @@
             :name="name"
             :value="value"
             :required="isRequired"
-            :style="inputStyle"
             :checked="isChecked"
             :disabled="isDisabled"
             :readonly="isReadonly || isEditing"
             ww-responsive="radio-input"
             type="radio"
-            @click="handleClick"
         />
-        <!-- Editor click overlay -->
-        <div v-if="isEditing" class="ww-editor-click-overlay" @click="handleEditorClick"></div>
     </div>
 </template>
 
@@ -83,28 +79,6 @@ export default {
             /* wwEditor:end */
             return this.isParentReadonly || this.content.readonly;
         },
-        wrapperStyle() {
-            return {
-                position: 'relative',
-                display: 'inline-block',
-                ...this.style
-            };
-        },
-        inputStyle() {
-            // Return empty object since styles are now on wrapper
-            return {};
-        },
-    },
-    methods: {
-        handleClick(event) {
-            // Keep original functionality
-        },
-        handleEditorClick(event) {
-            /* wwEditor:start */
-            // Let the click bubble naturally for editor selection
-            console.log('[Radio Debug] Editor overlay clicked');
-            /* wwEditor:end */
-        },
     },
     watch: {
         isChecked: {
@@ -133,11 +107,16 @@ export default {
 
 <style lang="scss" scoped>
 .ww-input-radio-wrapper {
-    position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ww-input-radio {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    
     &:focus-visible {
         outline: none;
     }
@@ -146,18 +125,4 @@ export default {
         appearance: none;
     }
 }
-
-/* wwEditor:start */
-.ww-editor-click-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-    cursor: pointer;
-    // Transparent but clickable
-    background: transparent;
-}
-/* wwEditor:end */
 </style>
