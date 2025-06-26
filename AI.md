@@ -1,38 +1,60 @@
 ---
 name: ww-input-radio
-description: A customizable radio button input component for single option selection. Requires the ww-radiogroup component to be integrated.
-keywords: [radio, form, input, button, selection, choice]
+description: A radio input that self-registers with parent radiogroup. Designed to work with ww-radiogroup and ww-label components.
+keywords: [radio, form, input, button, selection, choice, option]
 ---
 
 #### ww-input-radio
 
 ***Purpose:***
-A native HTML radio input component that allows users to select a single option from a set of choices. Supports both browser default styling and custom appearances, with various states and accessibility features.
+A radio input component that automatically registers itself with a parent `ww-radiogroup` when present. Designed to be flexible and work both standalone and as part of a radio group, with seamless integration with `ww-label` for enhanced UX.
 
-***Features:***
-- Native HTML radio button implementation
-- Support for simple and custom appearances
-- Full accessibility support
-- Integration with parent ww-radiogroup component
+***Architecture:***
+- Self-registers with parent radiogroup if present
+- Can be wrapped in ww-label for clickable area
+- Maintains its own ID for label association
+- Receives state (checked, name, readonly) from parent group
+
+***Recommended Usage:***
+Inside a radiogroup with label wrapper:
+```
+ww-radiogroup
+  └── ww-label
+       └── ww-input-radio (value="option1")
+```
 
 ***Properties:***
-- appearance: 'simple'|'custom' - Controls visual style of the radio button (default: 'simple')
-- readonly: boolean - Prevents user interaction when true (default: false)
+- value: string/number - ***REQUIRED*** The value this radio represents
+- appearance: 'simple'|'custom' - Visual style of the radio button (default: 'simple')
+- readonly: boolean - Makes this specific radio readonly (default: false)
 
-***Exposed Variables:***
-- isChecked: Current checked state of the radio button (path: variables['current_element_uid-isChecked'])
-- isReadonly: Current readonly state (path: variables['current_element_uid-isReadonly'])
-- isRequired: Whether the radio input is required (path: variables['current_element_uid-isRequired'])
-- isDisabled: Whether the radio input is disabled (path: variables['current_element_uid-isDisabled'])
-- name: Name attribute for the radio input (path: variables['current_element_uid-name'])
-- value: Current value of the radio input (path: variables['current_element_uid-value'])
+***States:***
+- checked: Applied when the radio is selected
+- readonly: Applied when the radio is readonly
+
+***Behavior:***
+- **Inside a radiogroup**: Automatically registers and receives state from the group
+- **Standalone**: Functions as an independent radio input
+- **Inside a label**: The label becomes clickable to select the radio
+- **Click handling**: Wrapper div is clickable for better UX
+
+***Appearance Options:***
+- **simple**: Browser default radio button styling
+- **custom**: CSS appearance set to 'none' for full customization
+
+***Accessibility:***
+- Generates unique IDs for proper label association
+- Maintains native HTML radio behavior
+- Supports keyboard navigation
+- Proper ARIA attributes from parent group
+
+***Integration:***
+- **With ww-radiogroup**: Registers its value and receives selection state
+- **With ww-label**: Registers to disable label's "for" attribute
+- **With forms**: The parent radiogroup handles form integration
 
 ***Notes:***
-- The 'custom' appearance sets CSS appearance to 'none' for full customization
-- Integrates seamlessly with ww-radiogroup through Vue's provide/inject pattern
-- Maintains native HTML radio behavior for accessibility
-
-***Example:***
-<elements>
-{"uid":"input_radio","tag":"ww-input-radio","props":{"default":{"readonly":false,"appearance":"simple"}},"styles":{"default":{"margin":"5px 5px","display":true,"outline":"none"}}}
-</elements>
+- Must have a unique value within its radio group
+- The wrapper div allows clicking anywhere on the component
+- Readonly state can come from self or parent group
+- ID is auto-generated but can be overridden via attributes
