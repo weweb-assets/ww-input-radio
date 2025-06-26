@@ -1,5 +1,5 @@
 <template>
-    <div class="ww-input-radio-wrapper" v-bind="wrapperAttrs">
+    <div class="ww-input-radio-wrapper" v-bind="wrapperAttrs" @click="handleWrapperClick">
         <input
             class="ww-input-radio"
             ref="inputRef"
@@ -14,6 +14,7 @@
             :readonly="isReadonly || isEditing"
             ww-responsive="radio-input"
             type="radio"
+            @click.stop
         />
         <!-- Editor click overlay -->
         <div v-if="isEditing" class="ww-editor-click-overlay"></div>
@@ -22,8 +23,7 @@
 
 <script>
 import useWewebRadio from './useWewebRadio';
-
-import { ref, watch } from 'vue';
+import { ref, inject, computed } from 'vue';
 
 export default {
     inheritAttrs: false,
@@ -34,9 +34,23 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['add-state', 'remove-state'],
-    setup(props) {
+    emits: ['add-state', 'remove-state', 'update:sidepanel-content'],
+    setup(props, { emit }) {
         const inputRef = ref(null);
+        
+        // Register with parent label if available
+        const useLabelChild = inject('_wwLabel:useLabelChild', null);
+        
+        // Create computed name for label
+        const radioLabelName = computed(() => {
+            // Use value if available, otherwise use a generic name
+            return props.content.value || 'Radio option';
+        });
+        
+        // Register with label if inside one
+        if (useLabelChild) {
+            useLabelChild(props.wwElementState.uid, radioLabelName);
+        }
 
         const {
             isChecked,
@@ -44,20 +58,22 @@ export default {
             value,
             select,
             isRequired,
-            isReadonly: isParentReadonly,
+            isReadonly: composableReadonly,
             isDisabled,
-            clicked,
-            resetClicked,
-        } = useWewebRadio(props);
+            insideRadioGroup,
+        } = useWewebRadio(props, emit);
 
-        watch(clicked, value => {
-            if (value) {
-                inputRef.value.focus();
-                resetClicked();
-            }
-        });
-
-        return { inputRef, isChecked, name, value, select, isParentReadonly, isDisabled, isRequired };
+        return { 
+            inputRef, 
+            isChecked, 
+            name, 
+            value, 
+            select, 
+            composableReadonly, 
+            isDisabled, 
+            isRequired,
+            insideRadioGroup,
+        };
     },
     computed: {
         isInternalChecked: {
@@ -65,8 +81,8 @@ export default {
                 return this.isChecked;
             },
             set(value) {
-                if (value) {
-                    if (!this.isEditing) this.select();
+                if (value && !this.isEditing) {
+                    this.select();
                 }
             },
         },
@@ -74,6 +90,7 @@ export default {
             /* wwEditor:start */
             return this.wwEditorState.isEditing;
             /* wwEditor:end */
+            return false;
         },
         isReadonly() {
             /* wwEditor:start */
@@ -81,7 +98,7 @@ export default {
                 return this.wwElementState.states.includes('readonly');
             }
             /* wwEditor:end */
-            return this.isParentReadonly || this.content.readonly;
+            return this.composableReadonly || this.content.readonly;
         },
         wrapperAttrs() {
             // Get all attributes except style
@@ -111,6 +128,14 @@ export default {
             immediate: true,
         },
     },
+    methods: {
+        handleWrapperClick() {
+            // Allow clicking on the wrapper to select the radio
+            if (!this.isEditing && !this.isReadonly) {
+                this.select();
+            }
+        },
+    },
 };
 </script>
 
@@ -118,9 +143,17 @@ export default {
 .ww-input-radio-wrapper {
     position: relative;
     display: inline-block;
+    cursor: pointer;
+    
+    &:has(input[readonly]),
+    &:has(input[disabled]) {
+        cursor: not-allowed;
+    }
 }
 
 .ww-input-radio {
+    cursor: inherit;
+    
     &:focus-visible {
         outline: none;
     }
