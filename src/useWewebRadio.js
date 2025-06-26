@@ -53,20 +53,11 @@ export default function useWewebRadio(props, emit) {
     });
     
     const select = () => {
-        console.log('[Radio useWewebRadio] select() called');
-        console.log('[Radio useWewebRadio] isReadonly:', isReadonly.value);
-        console.log('[Radio useWewebRadio] radioGroupContext exists:', !!radioGroupContext);
-        
-        if (isReadonly.value) {
-            console.log('[Radio useWewebRadio] Skipping select - radio is readonly');
-            return;
-        }
+        if (isReadonly.value) return;
         
         if (radioGroupContext && radioGroupContext.select) {
-            console.log('[Radio useWewebRadio] Calling radioGroupContext.select()');
             radioGroupContext.select();
         } else {
-            console.log('[Radio useWewebRadio] Standalone mode - setting checked to true');
             // Standalone behavior
             standaloneChecked.value = true;
         }

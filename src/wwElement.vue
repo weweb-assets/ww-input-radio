@@ -5,7 +5,7 @@
         :id="inputId"
         v-bind="$attrs"
         :class="{ 'no-appearance': content.appearance === 'custom' }"
-        :name="name"
+        :name="insideRadioGroup ? `radio-${inputId}` : name"
         :value="value"
         :required="isRequired"
         :checked="isChecked"
@@ -118,37 +118,23 @@ export default {
     },
     methods: {
         handleClick(event) {
-            console.log('[Radio] handleClick called');
-            console.log('[Radio] isEditing:', this.isEditing);
-            console.log('[Radio] event target:', event.target);
-            console.log('[Radio] current target:', event.currentTarget);
-            
             if (this.isEditing) {
-                console.log('[Radio] Preventing click due to editing mode');
                 event.preventDefault();
                 event.stopPropagation();
             }
         },
         handleChange(event) {
-            console.log('[Radio] handleChange called');
-            console.log('[Radio] isEditing:', this.isEditing);
-            console.log('[Radio] checked:', event.target.checked);
-            console.log('[Radio] value:', this.value);
-            console.log('[Radio] isChecked (from context):', this.isChecked);
-            
             // Always prevent default to let our logic handle it
             event.preventDefault();
             
             // Prevent change in editing mode
             if (this.isEditing) {
-                console.log('[Radio] Preventing change due to editing mode');
                 event.stopPropagation();
                 return;
             }
             
             // For normal operation, always trigger select
             // Don't check event.target.checked as it might be wrong due to native behavior
-            console.log('[Radio] Calling select()');
             this.select();
         },
     },
