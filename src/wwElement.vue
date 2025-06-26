@@ -4,6 +4,7 @@
             class="ww-input-radio"
             ref="inputRef"
             v-model="isInternalChecked"
+            :id="inputId"
             :style="$attrs.style"
             :class="{ 'no-appearance': content.appearance === 'custom' }"
             :name="name"
@@ -23,7 +24,7 @@
 
 <script>
 import useWewebRadio from './useWewebRadio';
-import { ref, inject, computed } from 'vue';
+import { ref, inject, computed, useId } from 'vue';
 
 export default {
     inheritAttrs: false,
@@ -38,12 +39,17 @@ export default {
     setup(props, { emit }) {
         const inputRef = ref(null);
         
+        // Generate unique ID for the radio input
+        const generatedId = `ww-input-radio-${useId()}`;
+        
+        // Use custom ID if set, otherwise use generated ID
+        const inputId = computed(() => props.wwElementState.props?.attributes?.id || generatedId);
+        
         // Register with parent label if available
         const useLabelChild = inject('_wwLabel:useLabelChild', null);
         
-        // Create computed name for label
+        // Create computed name for label - should show radio value
         const radioLabelName = computed(() => {
-            // Use value if available, otherwise use a generic name
             return props.content.value || 'Radio option';
         });
         
@@ -64,7 +70,8 @@ export default {
         } = useWewebRadio(props, emit);
 
         return { 
-            inputRef, 
+            inputRef,
+            inputId,
             isChecked, 
             name, 
             value, 
