@@ -58,3 +58,37 @@ ww-radiogroup
 - The wrapper div allows clicking anywhere on the component
 - Readonly state can come from self or parent group
 - ID is auto-generated but can be overridden via attributes
+
+***Examples:***
+
+1. **Simple radio group:**
+<elements>
+{"uid":"radio-group-1","tag":"ww-radiogroup","name":"Size Selection","props":{"default":{"name":"size","value":"medium","fieldName":"size"}},"styles":{"default":{"display":"flex","gap":"16px"}},"slots":{"children":[{"uid":"radio-small"},{"uid":"radio-medium"},{"uid":"radio-large"}]}}
+{"uid":"radio-small","tag":"ww-input-radio","props":{"default":{"value":"small"}}}
+{"uid":"radio-medium","tag":"ww-input-radio","props":{"default":{"value":"medium"}}}
+{"uid":"radio-large","tag":"ww-input-radio","props":{"default":{"value":"large"}}}
+</elements>
+
+2. **Radio with label (recommended pattern):**
+<elements>
+{"uid":"radio-group-2","tag":"ww-radiogroup","name":"Plan Selection","props":{"default":{"name":"plan","fieldName":"plan"}},"styles":{"default":{"display":"flex","flexDirection":"column","gap":"12px"}},"slots":{"children":[{"uid":"basic-option"},{"uid":"pro-option"}]}}
+{"uid":"basic-option","tag":"ww-label","styles":{"default":{"display":"flex","alignItems":"center","gap":"8px","cursor":"pointer"}},"slots":{"children":[{"uid":"basic-radio"},{"uid":"basic-text"}]}}
+{"uid":"basic-radio","tag":"ww-input-radio","props":{"default":{"value":"basic"}}}
+{"uid":"basic-text","tag":"ww-text","props":{"default":{"text":{"en":"Basic Plan - $10/month"}}}}
+{"uid":"pro-option","tag":"ww-label","styles":{"default":{"display":"flex","alignItems":"center","gap":"8px","cursor":"pointer"}},"slots":{"children":[{"uid":"pro-radio"},{"uid":"pro-text"}]}}
+{"uid":"pro-radio","tag":"ww-input-radio","props":{"default":{"value":"pro"}}}
+{"uid":"pro-text","tag":"ww-text","props":{"default":{"text":{"en":"Pro Plan - $25/month"}}}}
+</elements>
+
+3. **Custom styled radio (hidden with label card):**
+<elements>
+{"uid":"radio-group-3","tag":"ww-radiogroup","name":"Theme Selection","props":{"default":{"name":"theme","value":"light"}},"styles":{"default":{"display":"grid","gridTemplateColumns":"1fr 1fr","gap":"16px"}},"slots":{"children":[{"uid":"light-card"},{"uid":"dark-card"}]}}
+{"uid":"light-card","tag":"ww-label","styles":{"default":{"display":"flex","flexDirection":"column","alignItems":"center","padding":"24px","border":"2px solid #e5e7eb","borderRadius":"12px","cursor":"pointer","transition":"all 0.2s"},"_wwHover_default":{"borderColor":"#3b82f6"}},"slots":{"children":[{"uid":"light-icon"},{"uid":"light-title"},{"uid":"light-radio"}]}}
+{"uid":"light-icon","tag":"ww-icon","props":{"default":{"icon":"sun"}},"styles":{"default":{"fontSize":"32px","marginBottom":"8px","color":"#f59e0b"}}}
+{"uid":"light-title","tag":"ww-text","props":{"default":{"text":{"en":"Light Mode"}}},"styles":{"default":{"fontSize":"16px","fontWeight":"600","marginBottom":"8px"}}}
+{"uid":"light-radio","tag":"ww-input-radio","props":{"default":{"value":"light","appearance":"hidden"}}}
+{"uid":"dark-card","tag":"ww-label","styles":{"default":{"display":"flex","flexDirection":"column","alignItems":"center","padding":"24px","border":"2px solid #e5e7eb","borderRadius":"12px","cursor":"pointer","transition":"all 0.2s"},"_wwHover_default":{"borderColor":"#3b82f6"}},"slots":{"children":[{"uid":"dark-icon"},{"uid":"dark-title"},{"uid":"dark-radio"}]}}
+{"uid":"dark-icon","tag":"ww-icon","props":{"default":{"icon":"moon"}},"styles":{"default":{"fontSize":"32px","marginBottom":"8px","color":"#6366f1"}}}
+{"uid":"dark-title","tag":"ww-text","props":{"default":{"text":{"en":"Dark Mode"}}},"styles":{"default":{"fontSize":"16px","fontWeight":"600","marginBottom":"8px"}}}
+{"uid":"dark-radio","tag":"ww-input-radio","props":{"default":{"value":"dark","appearance":"hidden"}}}
+</elements>
