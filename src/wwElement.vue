@@ -1,22 +1,21 @@
 <template>
-    <div class="ww-input-radio-wrapper" v-bind="wrapperAttrs" @click="handleWrapperClick">
-        <input
-            class="ww-input-radio"
-            ref="inputRef"
-            :id="inputId"
-            :style="$attrs.style"
-            :class="{ 'no-appearance': content.appearance === 'custom' }"
-            :name="name"
-            :value="value"
-            :required="isRequired"
-            :checked="isChecked"
-            :disabled="isDisabled"
-            :readonly="isReadonly"
-            ww-responsive="radio-input"
-            type="radio"
-            @change="handleChange"
-        />
-    </div>
+    <input
+        class="ww-input-radio"
+        ref="inputRef"
+        :id="inputId"
+        v-bind="$attrs"
+        :class="{ 'no-appearance': content.appearance === 'custom' }"
+        :name="name"
+        :value="value"
+        :required="isRequired"
+        :checked="isChecked"
+        :disabled="isDisabled"
+        :readonly="isReadonly"
+        ww-responsive="radio-input"
+        type="radio"
+        @change="handleChange"
+        @click="handleClick"
+    />
 </template>
 
 <script>
@@ -82,7 +81,9 @@ export default {
     computed: {
         isEditing() {
             /* wwEditor:start */
-            return this.wwEditorState.isEditing;
+            const editing = this.wwEditorState.isEditing;
+            console.log('[Radio] isEditing computed:', editing, 'wwEditorState:', this.wwEditorState);
+            return editing;
             /* wwEditor:end */
             return false;
         },
@@ -93,11 +94,6 @@ export default {
             }
             /* wwEditor:end */
             return this.composableReadonly || this.content.readonly;
-        },
-        wrapperAttrs() {
-            // Get all attributes except style
-            const { style, ...rest } = this.$attrs;
-            return rest;
         },
     },
     watch: {
@@ -123,20 +119,26 @@ export default {
         },
     },
     methods: {
+        handleClick(event) {
+            console.log('[Radio] handleClick - isEditing:', this.isEditing);
+            if (this.isEditing) {
+                console.log('[Radio] Preventing click in edit mode');
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        },
         handleChange(event) {
+            console.log('[Radio] handleChange - isEditing:', this.isEditing, 'checked:', event.target.checked);
             // Prevent default and stop the change in editing mode
             if (this.isEditing) {
+                console.log('[Radio] Preventing change in edit mode');
                 event.preventDefault();
+                event.stopPropagation();
                 return;
             }
             // For normal operation, trigger select
             if (event.target.checked) {
-                this.select();
-            }
-        },
-        handleWrapperClick() {
-            // Allow clicking on the wrapper to select the radio
-            if (!this.isEditing && !this.isReadonly) {
+                console.log('[Radio] Radio checked, calling select()');
                 this.select();
             }
         },
@@ -145,19 +147,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ww-input-radio-wrapper {
-    position: relative;
-    display: inline-block;
+.ww-input-radio {
     cursor: pointer;
 
-    &:has(input[readonly]),
-    &:has(input[disabled]) {
+    &[readonly],
+    &[disabled] {
         cursor: not-allowed;
     }
-}
-
-.ww-input-radio {
-    cursor: inherit;
 
     &:focus-visible {
         outline: none;
@@ -167,5 +163,4 @@ export default {
         appearance: none;
     }
 }
-
 </style>
