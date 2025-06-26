@@ -81,9 +81,7 @@ export default {
     computed: {
         isEditing() {
             /* wwEditor:start */
-            const editing = this.wwEditorState.isEditing;
-            console.log('[Radio] isEditing computed:', editing, 'wwEditorState:', this.wwEditorState);
-            return editing;
+            return this.wwEditorState.isEditing;
             /* wwEditor:end */
             return false;
         },
@@ -120,25 +118,20 @@ export default {
     },
     methods: {
         handleClick(event) {
-            console.log('[Radio] handleClick - isEditing:', this.isEditing);
             if (this.isEditing) {
-                console.log('[Radio] Preventing click in edit mode');
                 event.preventDefault();
                 event.stopPropagation();
             }
         },
         handleChange(event) {
-            console.log('[Radio] handleChange - isEditing:', this.isEditing, 'checked:', event.target.checked);
             // Prevent default and stop the change in editing mode
             if (this.isEditing) {
-                console.log('[Radio] Preventing change in edit mode');
                 event.preventDefault();
                 event.stopPropagation();
                 return;
             }
             // For normal operation, trigger select
             if (event.target.checked) {
-                console.log('[Radio] Radio checked, calling select()');
                 this.select();
             }
         },
