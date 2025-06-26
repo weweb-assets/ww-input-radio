@@ -118,21 +118,36 @@ export default {
     },
     methods: {
         handleClick(event) {
+            console.log('[Radio] handleClick called');
+            console.log('[Radio] isEditing:', this.isEditing);
+            console.log('[Radio] event target:', event.target);
+            console.log('[Radio] current target:', event.currentTarget);
+            
             if (this.isEditing) {
+                console.log('[Radio] Preventing click due to editing mode');
                 event.preventDefault();
                 event.stopPropagation();
             }
         },
         handleChange(event) {
+            console.log('[Radio] handleChange called');
+            console.log('[Radio] isEditing:', this.isEditing);
+            console.log('[Radio] checked:', event.target.checked);
+            console.log('[Radio] value:', this.value);
+            
             // Prevent default and stop the change in editing mode
             if (this.isEditing) {
+                console.log('[Radio] Preventing change due to editing mode');
                 event.preventDefault();
                 event.stopPropagation();
                 return;
             }
             // For normal operation, trigger select
             if (event.target.checked) {
+                console.log('[Radio] Radio is checked, calling select()');
                 this.select();
+            } else {
+                console.log('[Radio] Radio is not checked');
             }
         },
     },
