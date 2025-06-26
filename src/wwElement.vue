@@ -134,21 +134,22 @@ export default {
             console.log('[Radio] isEditing:', this.isEditing);
             console.log('[Radio] checked:', event.target.checked);
             console.log('[Radio] value:', this.value);
+            console.log('[Radio] isChecked (from context):', this.isChecked);
             
-            // Prevent default and stop the change in editing mode
+            // Always prevent default to let our logic handle it
+            event.preventDefault();
+            
+            // Prevent change in editing mode
             if (this.isEditing) {
                 console.log('[Radio] Preventing change due to editing mode');
-                event.preventDefault();
                 event.stopPropagation();
                 return;
             }
-            // For normal operation, trigger select
-            if (event.target.checked) {
-                console.log('[Radio] Radio is checked, calling select()');
-                this.select();
-            } else {
-                console.log('[Radio] Radio is not checked');
-            }
+            
+            // For normal operation, always trigger select
+            // Don't check event.target.checked as it might be wrong due to native behavior
+            console.log('[Radio] Calling select()');
+            this.select();
         },
     },
 };
