@@ -118,12 +118,32 @@ export default {
     },
     methods: {
         handleClick(event) {
+            console.log('Radio handleClick:', {
+                id: this.inputId,
+                name: this.name,
+                value: this.value,
+                isChecked: this.isChecked,
+                isEditing: this.isEditing,
+                insideRadioGroup: this.insideRadioGroup,
+                event: event.type
+            });
+            
             if (this.isEditing) {
                 event.preventDefault();
                 event.stopPropagation();
             }
         },
         handleChange(event) {
+            console.log('Radio handleChange:', {
+                id: this.inputId,
+                name: this.name,
+                value: this.value,
+                isChecked: this.isChecked,
+                targetChecked: event.target.checked,
+                isEditing: this.isEditing,
+                insideRadioGroup: this.insideRadioGroup
+            });
+            
             // Prevent change in editing mode
             if (this.isEditing) {
                 event.preventDefault();
@@ -131,6 +151,7 @@ export default {
                 return;
             }
             
+            console.log('Calling select() for radio:', this.value);
             // For normal operation, let native behavior work and trigger select
             this.select();
         },

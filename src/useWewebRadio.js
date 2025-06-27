@@ -53,12 +53,25 @@ export default function useWewebRadio(props, emit) {
     });
     
     const select = () => {
-        if (isReadonly.value) return;
+        console.log('useWewebRadio select called:', {
+            value: value.value,
+            isReadonly: isReadonly.value,
+            hasRadioGroupContext: !!radioGroupContext,
+            radioGroupName: radioGroupContext?.name?.value,
+            currentChecked: isChecked.value
+        });
+        
+        if (isReadonly.value) {
+            console.log('Radio is readonly, returning');
+            return;
+        }
         
         if (radioGroupContext && radioGroupContext.select) {
+            console.log('Calling radioGroupContext.select()');
             radioGroupContext.select();
         } else {
             // Standalone behavior
+            console.log('Setting standaloneChecked to true');
             standaloneChecked.value = true;
         }
     };
