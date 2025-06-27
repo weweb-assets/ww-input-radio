@@ -124,17 +124,14 @@ export default {
             }
         },
         handleChange(event) {
-            // Always prevent default to let our logic handle it
-            event.preventDefault();
-            
             // Prevent change in editing mode
             if (this.isEditing) {
+                event.preventDefault();
                 event.stopPropagation();
                 return;
             }
             
-            // For normal operation, always trigger select
-            // Don't check event.target.checked as it might be wrong due to native behavior
+            // For normal operation, let native behavior work and trigger select
             this.select();
         },
     },
