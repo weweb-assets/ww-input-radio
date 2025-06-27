@@ -23,7 +23,14 @@ export default function useWewebRadio(props, emit) {
     // Get values from context or use standalone defaults
     const isChecked = computed(() => {
         if (radioGroupContext) {
-            return radioGroupContext.isSelected?.value || false;
+            const result = radioGroupContext.isSelected?.value || false;
+            console.log('useWewebRadio isChecked computed:', {
+                value: value.value,
+                radioGroupContext: !!radioGroupContext,
+                isSelected: result,
+                contextSelectedValue: radioGroupContext.selectedValue?.value
+            });
+            return result;
         }
         return standaloneChecked.value;
     });
