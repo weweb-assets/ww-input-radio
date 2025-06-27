@@ -14,7 +14,6 @@
         ww-responsive="radio-input"
         type="radio"
         @change="handleChange"
-        @click="handleClick"
     />
 </template>
 
@@ -117,22 +116,6 @@ export default {
         },
     },
     methods: {
-        handleClick(event) {
-            console.log('Radio handleClick:', {
-                id: this.inputId,
-                name: this.name,
-                value: this.value,
-                isChecked: this.isChecked,
-                isEditing: this.isEditing,
-                insideRadioGroup: this.insideRadioGroup,
-                event: event.type
-            });
-            
-            if (this.isEditing) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-        },
         handleChange(event) {
             console.log('Radio handleChange:', {
                 id: this.inputId,
