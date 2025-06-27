@@ -5,7 +5,7 @@
         :id="inputId"
         v-bind="$attrs"
         :class="{ 'no-appearance': content.appearance === 'custom' }"
-        :name="inputId"
+        :name="name"
         :value="value"
         :required="isRequired"
         :checked="isChecked"
