@@ -25,7 +25,7 @@ export default function useWewebRadio(props, emit) {
         if (radioGroupContext) {
             const result = radioGroupContext.isSelected?.value || false;
             console.log('useWewebRadio isChecked computed:', {
-                value: value.value,
+                value: radioValue.value,
                 radioGroupContext: !!radioGroupContext,
                 isSelected: result,
                 contextSelectedValue: radioGroupContext.selectedValue?.value
