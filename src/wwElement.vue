@@ -96,6 +96,12 @@ export default {
     watch: {
         isChecked: {
             handler(isChecked) {
+                console.log('isChecked watcher:', {
+                    id: this.inputId,
+                    value: this.value,
+                    isChecked: isChecked,
+                    typeOfIsChecked: typeof isChecked
+                });
                 if (isChecked) {
                     this.$emit('add-state', 'checked');
                 } else {
@@ -125,6 +131,12 @@ export default {
                 targetChecked: event.target.checked,
                 isEditing: this.isEditing,
                 insideRadioGroup: this.insideRadioGroup
+            });
+            console.log('isChecked detailed:', {
+                isChecked: this.isChecked,
+                typeOfIsChecked: typeof this.isChecked,
+                isCheckedValue: this.isChecked?.value,
+                isCheckedValueOf: this.isChecked?.valueOf()
             });
             
             // Prevent change in editing mode
