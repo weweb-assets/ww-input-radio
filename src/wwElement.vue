@@ -5,7 +5,7 @@
         :id="inputId"
         v-bind="$attrs"
         :class="{ 'no-appearance': content.appearance === 'custom' }"
-        :name="insideRadioGroup ? `radio-${inputId}` : name"
+        :name="inputId"
         :value="value"
         :required="isRequired"
         :checked="isChecked"
