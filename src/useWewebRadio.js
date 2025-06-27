@@ -61,7 +61,7 @@ export default function useWewebRadio(props, emit) {
     
     const select = () => {
         console.log('useWewebRadio select called:', {
-            value: value.value,
+            value: radioValue.value,
             isReadonly: isReadonly.value,
             hasRadioGroupContext: !!radioGroupContext,
             radioGroupName: radioGroupContext?.name?.value,
