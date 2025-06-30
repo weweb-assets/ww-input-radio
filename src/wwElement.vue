@@ -96,12 +96,6 @@ export default {
     watch: {
         isChecked: {
             handler(isChecked) {
-                console.log('isChecked watcher:', {
-                    id: this.inputId,
-                    value: this.value,
-                    isChecked: isChecked,
-                    typeOfIsChecked: typeof isChecked
-                });
                 if (isChecked) {
                     this.$emit('add-state', 'checked');
                 } else {
@@ -123,22 +117,6 @@ export default {
     },
     methods: {
         handleChange(event) {
-            console.log('Radio handleChange:', {
-                id: this.inputId,
-                name: this.name,
-                value: this.value,
-                isChecked: this.isChecked,
-                targetChecked: event.target.checked,
-                isEditing: this.isEditing,
-                insideRadioGroup: this.insideRadioGroup
-            });
-            console.log('isChecked detailed:', {
-                isChecked: this.isChecked,
-                typeOfIsChecked: typeof this.isChecked,
-                isCheckedValue: this.isChecked?.value,
-                isCheckedValueOf: this.isChecked?.valueOf()
-            });
-            
             // Prevent change in editing mode
             if (this.isEditing) {
                 event.preventDefault();
@@ -146,7 +124,6 @@ export default {
                 return;
             }
             
-            console.log('Calling select() for radio:', this.value);
             // For normal operation, let native behavior work and trigger select
             this.select();
         },
