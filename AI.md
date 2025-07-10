@@ -47,6 +47,6 @@ A complete radio group component that renders multiple radio button options. Man
 ***Example:***
 Basic usage with custom styled options:
 <elements>
-{"uid":0,"tag":"ww-input-radio","props":{"default":{"options":[{"value":"basic","label":"Basic Plan"},{"value":"pro","label":"Professional"},{"value":"enterprise","label":"Enterprise"}],"value":"basic","required":true,"name":"subscription"}},"styles":{"default":{"display":"flex","flexDirection":"column","rowGap":"12px"}},"children":{"choicesElement":{"uid":1}}}
+{"uid":0,"tag":"ww-input-radio","props":{"default":{"options":[{"value":"basic","label":"Basic Plan"},{"value":"pro","label":"Professional"},{"value":"enterprise","label":"Enterprise"}],"value":"basic","required":true,"name":"subscription"}},"styles":{"default":{"display":"flex","flexDirection":"column","rowGap":"12px"}},"slots":{"choicesElement":[{"uid":1}]}}
 {"uid":1,"tag":"ww-text","props":{"default":{"text":{"en":"{{label}}"}}},"styles":{"default":{"fontSize":"16px","fontWeight":"500"}}}
 </elements>
