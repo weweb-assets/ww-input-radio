@@ -15,8 +15,8 @@ export default {
         displayAllowedValues: ['flex', 'inline-flex'],
     },
     triggerEvents: [
-        { name: 'change', label: 'On Change', event: { value: '' }, default: true },
-        { name: 'initValueChange', label: 'On Init value change', event: { value: '' } },
+        { name: 'change', label: 'On Change', event: { value: '' }, default: true, description: "Run when the value changes." },
+        { name: 'initValueChange', label: 'On Init value change', event: { value: '' }, description: "Run when the initial value changes." },
     ],
     customStylePropertiesOrder: ['direction', ['rowGap', 'columnGap'], ['justifyContent', 'alignItems'], 'flexWrap'],
     properties: {
